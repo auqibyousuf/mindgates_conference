@@ -1,0 +1,34 @@
+[
+  {
+    "id": "ed-1",
+    "name": "Dr Naseer Ganiee",
+    "role": "Director & Chief Editor",
+    "institution": "Conference Event / Mindgates Softtech",
+    "image": "/images/banners/hero-v2.png",
+    "category": "Chief"
+  },
+  {
+    "id": "ed-2",
+    "name": "Dr. Sarah Johnson",
+    "role": "Associate Editor",
+    "institution": "Department of Artificial Intelligence, MIT",
+    "image": "/images/banners/hero-v2.png",
+    "category": "Associate"
+  },
+  {
+    "id": "ed-3",
+    "name": "Prof. David Miller",
+    "role": "Technical Advisor",
+    "institution": "School of Computer Science, Stanford",
+    "image": "/images/banners/hero-v2.png",
+    "category": "Advisory"
+  },
+  {
+    "id": "ed-4",
+    "name": "Dr. Elena Rodriguez",
+    "role": "Council Member",
+    "institution": "Institute of Sustainable Technology, Madrid",
+    "image": "/images/banners/hero-v2.png",
+    "category": "Council"
+  }
+]

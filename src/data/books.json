@@ -1,0 +1,23 @@
+[
+  {
+    "id": "book-1",
+    "author": "Dr Naseer Ganiee",
+    "title": "Modern Research Methodologies",
+    "isbn": "978-3-16-148410-0",
+    "image": "/images/books/book1.png"
+  },
+  {
+    "id": "book-2",
+    "author": "Maria L. Chen & Jonathan S. Reid",
+    "title": "Sustainable Architecture in Urban Environments",
+    "isbn": "978-1-23-456789-0",
+    "image": "/images/books/book2.png"
+  },
+  {
+    "id": "book-3",
+    "author": "Isabelle Renard & David K. Adebayo",
+    "title": "Global Economics and Social Justice",
+    "isbn": "978-0-98-765432-1",
+    "image": "/images/books/book3.png"
+  }
+]
