@@ -38,10 +38,11 @@ export default function AdminPage() {
         const jsonData = await response.json();
         setData(jsonData);
       } else {
-        throw new Error('Failed to fetch');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(JSON.stringify(errorData, null, 2));
       }
-    } catch {
-      setStatus({ type: 'error', msg: 'Could not load content' });
+    } catch (err) {
+      setStatus({ type: 'error', msg: `Could not load content: ${err instanceof Error ? err.message : 'Unknown error'}` });
     }
     setLoading(false);
   }, [activeTab]);

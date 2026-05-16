@@ -16,8 +16,21 @@ export async function GET(request: Request) {
     const data = fs.readFileSync(filePath, 'utf8');
 
     return NextResponse.json(JSON.parse(data));
-  } catch {
-    return NextResponse.json({ error: 'Failed to read data' }, { status: 500 });
+  } catch (err) {
+    const cwd = process.cwd();
+    let dirContent = [];
+    try {
+      dirContent = fs.readdirSync(path.join(cwd, 'src', 'data'));
+    } catch (e) {
+      dirContent = [`Error reading dir: ${e instanceof Error ? e.message : String(e)}`];
+    }
+    
+    return NextResponse.json({ 
+      error: 'Failed to read data', 
+      details: err instanceof Error ? err.message : String(err),
+      cwd: cwd,
+      dataDirContent: dirContent
+    }, { status: 500 });
   }
 }
 
@@ -35,7 +48,11 @@ export async function POST(request: Request) {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
+  } catch (err) {
+    console.error('Save error:', err);
+    return NextResponse.json({ 
+      error: 'Failed to save data', 
+      details: err instanceof Error ? err.message : String(err) 
+    }, { status: 500 });
   }
 }
