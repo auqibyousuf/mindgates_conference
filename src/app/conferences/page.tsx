@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, Search, Globe, MapPin, FileText, Download, ExternalLink } from 'lucide-react';
+import { Calendar, Search, Globe, MapPin, FileText, Download } from 'lucide-react';
 import conferences from '@/data/conferences.json';
 import { DataTable, Column } from '@/components/DataTable';
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Send, Clock, Globe } from 'lucide-react';
-import siteConfig from '@/data/siteConfig.json';
 import { GlassContainer } from '@/components/GlassContainer';
 
 export default function ContactPage() {

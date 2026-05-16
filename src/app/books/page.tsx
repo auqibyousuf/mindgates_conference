@@ -1,5 +1,4 @@
 import React from 'react';
-import { BookOpen, Search } from 'lucide-react';
 import books from '@/data/books.json';
 import { DataTable, Column } from '@/components/DataTable';
 import Image from 'next/image';
@@ -13,7 +12,7 @@ export default function BooksPage() {
       accessor: (book) => (
         <div className="relative size-16 rounded-lg overflow-hidden border border-foreground/5 shadow-sm group-hover:scale-110 transition-transform">
           <Image 
-            src={book.frontPageImage || '/images/books/book1.png'} 
+            src={book.image || '/images/books/book1.png'} 
             alt={book.title}
             fill
             className="object-cover"
@@ -43,7 +42,7 @@ export default function BooksPage() {
     },
     {
       header: 'Action',
-      accessor: (book) => (
+      accessor: () => (
         <button className="text-primary font-black uppercase tracking-widest text-[10px] hover:underline">
           View Details
         </button>

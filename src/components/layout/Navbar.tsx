@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { Menu, X, GraduationCap, ChevronRight, ChevronDown, Calendar, Book, Award, Image as ImageIcon, Users, Info } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -17,9 +16,9 @@ const NAV_STRUCTURE = [
     name: "Events", 
     icon: Calendar,
     children: [
-      { name: "All Conferences", href: "/conferences", desc: "View our global event calendar" },
-      { name: "Upcoming Events", href: "/conferences", desc: "Join our next scholarly gathering" },
-      { name: "Past Proceedings", href: "/conferences", desc: "Review previous session insights" },
+      { name: "All Conferences", href: "/conferences", icon: Calendar, desc: "View our global event calendar" },
+      { name: "Upcoming Events", href: "/conferences", icon: Calendar, desc: "Join our next scholarly gathering" },
+      { name: "Past Proceedings", href: "/conferences", icon: Calendar, desc: "Review previous session insights" },
     ]
   },
   { 
@@ -46,8 +45,6 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
-  const isHome = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {

@@ -47,6 +47,7 @@ export default function AdminPage() {
   }, [activeTab]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchContent();
   }, [fetchContent]);
 
@@ -209,7 +210,7 @@ function FileUpload({ onUpload }: { onUpload: (url: string) => void }) {
       } else {
         alert(data.error || 'Upload failed');
       }
-    } catch (err) {
+    } catch {
       alert('Upload failed');
     } finally {
       setUploading(false);

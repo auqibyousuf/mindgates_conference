@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     const data = fs.readFileSync(filePath, 'utf8');
 
     return NextResponse.json(JSON.parse(data));
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to read data' }, { status: 500 });
   }
 }

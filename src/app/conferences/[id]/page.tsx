@@ -4,9 +4,9 @@ import { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
-  Calendar, MapPin, Globe, FileText, Download, 
-  ChevronLeft, ChevronRight, Users, Clock, Share2, Printer,
-  FileCheck, HelpCircle, ArrowRight
+  Calendar, MapPin, Globe, Download, 
+  ChevronLeft, ChevronRight, Share2, Printer,
+  FileCheck, HelpCircle
 } from "lucide-react";
 import conferences from "@/data/conferences.json";
 import { clsx, type ClassValue } from "clsx";

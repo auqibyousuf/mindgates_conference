@@ -4,7 +4,6 @@ import { Mail, Linkedin, GraduationCap, UserCheck, Phone } from 'lucide-react';
 import editors from '@/data/editors.json';
 import { GlassContainer } from '@/components/GlassContainer';
 
-type Editor = typeof editors[0];
 
 export default function EditorsPage() {
   const categories = ["Chief", "Associate", "Advisory", "Council"];

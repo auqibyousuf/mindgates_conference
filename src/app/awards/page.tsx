@@ -1,4 +1,4 @@
-import { Award, Trophy, Star, Calendar, MapPin, Search, Medal } from "lucide-react";
+import { Trophy, Star, Calendar, MapPin, Medal } from "lucide-react";
 import awards from "@/data/awards.json";
 import { DataTable, Column } from "@/components/DataTable";
 import { GlassContainer } from "@/components/GlassContainer";
@@ -20,7 +20,7 @@ export default function AwardsPage() {
     {
       header: 'Project/Paper Title',
       accessor: (award) => (
-        <span className="text-foreground/80 font-medium italic">"{award.title}"</span>
+        <span className="text-foreground/80 font-medium italic">&quot;{award.title}&quot;</span>
       ),
       className: "min-w-[250px]"
     },
@@ -86,7 +86,7 @@ export default function AwardsPage() {
                 <Trophy className="size-5" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">Hall of Fame</span>
               </div>
-              <h2 className="text-5xl md:text-6xl font-serif font-bold leading-tight">"Innovation in Research <br/><span className="text-primary">Excellence</span>"</h2>
+              <h2 className="text-5xl md:text-6xl font-serif font-bold leading-tight">&quot;Innovation in Research <br/><span className="text-primary">Excellence</span>&quot;</h2>
               <p className="text-xl text-white/60 leading-relaxed font-light">
                 Awarded to individuals who have significantly pushed the boundaries of academic inquiry and collaborative research.
               </p>
