@@ -16,8 +16,8 @@ export default function Home() {
       <section className="relative h-[90vh] min-h-187.5 flex items-center pt-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/banners/hero-v2.png"
-            alt="Mindgates Research conference forum Hero"
+            src={siteConfig.hero.image}
+            alt={siteConfig.name}
             fill
             className="object-cover brightness-[0.5] scale-105 animate-slow-zoom"
             priority
@@ -26,34 +26,34 @@ export default function Home() {
           <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-60" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
+        <div className="relative z-10 section-container w-full">
           <div className="max-w-3xl space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 backdrop-blur-md">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">Mindgates Research conference forum</span>
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">{siteConfig.hero.badge}</span>
             </div>
             
             <h1 className="text-6xl md:text-8xl font-serif font-bold text-white leading-[1.05]">
-              Elevating <span className="text-primary italic relative">
-                Scholarly
+              {siteConfig.hero.titleLine1} <span className="text-primary italic relative">
+                {siteConfig.hero.titleItalic}
                 <svg className="absolute -bottom-2 left-0 w-full h-3 text-primary/40" viewBox="0 0 200 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5 15C50 5 150 5 195 15" stroke="currentColor" strokeWidth="8" strokeLinecap="round"/>
                 </svg>
-              </span> Excellence
+              </span> {siteConfig.hero.titleLine2}
             </h1>
             
             <p className="text-xl text-white/80 leading-relaxed max-w-2xl font-medium">
-              (A Unit of Mindgates Softtech Solutions Pvt Ltd.)<br />
-              {siteConfig.description}
+              <span className="text-primary font-black block mb-2">{siteConfig.tagline}</span>
+              {siteConfig.hero.description}
             </p>
 
             <div className="flex flex-wrap gap-6 pt-6">
-              <Link href="/conferences" className="glass-button text-lg px-10 py-5 group">
-                Explore Conferences
+              <Link href={siteConfig.hero.primaryButton.link} className="glass-button text-lg px-10 py-5 group">
+                {siteConfig.hero.primaryButton.label}
                 <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="/about" className="px-10 py-5 rounded-xl border border-white/30 bg-white/10 backdrop-blur-xl text-white font-bold hover:bg-white/20 transition-all shadow-xl shadow-black/20">
-                Our Mission
+              <Link href={siteConfig.hero.secondaryButton.link} className="px-10 py-5 rounded-xl border border-white/30 bg-white/10 backdrop-blur-xl text-white font-bold hover:bg-white/20 transition-all shadow-xl shadow-black/20">
+                {siteConfig.hero.secondaryButton.label}
               </Link>
             </div>
           </div>
