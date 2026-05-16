@@ -45,8 +45,11 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
@@ -60,14 +63,14 @@ export default function Navbar() {
     <nav
       className={cn(
         "fixed left-0 right-0 z-50 transition-all duration-500 px-6",
-        scrolled ? "top-4" : "top-6"
+        (mounted && scrolled) ? "top-4" : "top-6"
       )}
       onMouseLeave={() => setActiveDropdown(null)}
     >
       <div
         className={cn(
           "section-container transition-all duration-500 rounded-2xl",
-          scrolled
+          (mounted && scrolled)
             ? "glass-card py-3 shadow-[0_25px_50px_-12px_rgba(49,46,129,0.15)] border-white/80"
             : "bg-linear-to-b from-primary to-primary/95 border border-white/20 py-5 shadow-2xl"
         )}

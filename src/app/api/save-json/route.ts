@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -18,18 +20,9 @@ export async function GET(request: Request) {
     return NextResponse.json(JSON.parse(data));
   } catch (err) {
     const cwd = process.cwd();
-    let dirContent = [];
-    try {
-      dirContent = fs.readdirSync(path.join(cwd, 'src', 'data'));
-    } catch (e) {
-      dirContent = [`Error reading dir: ${e instanceof Error ? e.message : String(e)}`];
-    }
-    
+    const detail = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ 
-      error: 'Failed to read data', 
-      details: err instanceof Error ? err.message : String(err),
-      cwd: cwd,
-      dataDirContent: dirContent
+      error: `Failed to read data: ${detail} (CWD: ${cwd})`
     }, { status: 500 });
   }
 }
