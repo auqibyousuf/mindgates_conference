@@ -1,9 +1,57 @@
 import React from 'react';
 import { BookOpen, Search } from 'lucide-react';
 import books from '@/data/books.json';
-import { BookCard } from '@/components/BookCard';
+import { DataTable, Column } from '@/components/DataTable';
+import Image from 'next/image';
+
+type Book = typeof books[0];
 
 export default function BooksPage() {
+  const columns: Column<Book>[] = [
+    {
+      header: 'Book Front Page',
+      accessor: (book) => (
+        <div className="relative size-16 rounded-lg overflow-hidden border border-foreground/5 shadow-sm group-hover:scale-110 transition-transform">
+          <Image 
+            src={book.frontPageImage || '/images/books/book1.png'} 
+            alt={book.title}
+            fill
+            className="object-cover"
+          />
+        </div>
+      ),
+      className: "w-32"
+    },
+    {
+      header: 'Book Title',
+      accessor: (book) => (
+        <span className="text-foreground font-bold text-base">{book.title}</span>
+      ),
+      className: "min-w-[250px]"
+    },
+    {
+      header: 'Author Name',
+      accessor: 'author'
+    },
+    {
+      header: 'ISBN Number',
+      accessor: (book) => (
+        <code className="bg-foreground/5 px-2 py-1 rounded text-[11px] font-bold text-foreground/60 tracking-wider">
+          {book.isbn}
+        </code>
+      )
+    },
+    {
+      header: 'Action',
+      accessor: (book) => (
+        <button className="text-primary font-black uppercase tracking-widest text-[10px] hover:underline">
+          View Details
+        </button>
+      ),
+      className: "text-right"
+    }
+  ];
+
   return (
     <main className="min-h-screen bg-background pt-32 pb-20">
       {/* Header Section */}
@@ -18,20 +66,6 @@ export default function BooksPage() {
           <p className="max-w-2xl mx-auto text-xl text-foreground/60 leading-relaxed font-medium">
             Explore our curated collection of scholarly publications, research series, and academic monographs from leading researchers worldwide.
           </p>
-
-          <div className="max-w-xl mx-auto relative pt-4">
-            <div className="flex items-center bg-white/50 backdrop-blur-md border border-foreground/10 rounded-2xl p-2 pl-6 shadow-xl focus-within:ring-2 focus-within:ring-primary/20 transition-all">
-              <Search className="size-5 text-foreground/30 mr-4" />
-              <input 
-                type="text" 
-                placeholder="Search by Title, Author or ISBN..." 
-                className="grow bg-transparent border-none outline-none text-foreground font-medium placeholder:text-foreground/30"
-              />
-              <button className="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-primary-hover transition-colors">
-                Search
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Background Elements */}
@@ -41,21 +75,14 @@ export default function BooksPage() {
         </div>
       </section>
 
-      {/* Grid Section */}
+      {/* Table Section */}
       <section className="px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {books.map((book) => (
-              <BookCard key={book.id} book={book} />
-            ))}
-          </div>
-
-          {books.length === 0 && (
-            <div className="text-center py-40 glass-card">
-              <BookOpen className="size-16 text-foreground/10 mx-auto mb-6" />
-              <h3 className="text-2xl font-serif font-bold text-foreground/40">No books found matching your criteria.</h3>
-            </div>
-          )}
+          <DataTable 
+            columns={columns} 
+            data={books} 
+            emptyMessage="No publications found in our gallery." 
+          />
         </div>
       </section>
 

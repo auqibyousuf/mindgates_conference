@@ -52,7 +52,7 @@ export default function ConferenceDetailPage({ params }: { params: Promise<{ id:
                 </span>
                 <span className={cn(
                   "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
-                  conference.status === "Upcoming" ? "bg-emerald-500/10 text-emerald-600" : "bg-foreground/10 text-foreground/60"
+                  conference.status === "Upcoming" ? "bg-primary/10 text-primary" : "bg-foreground/10 text-foreground/60"
                 )}>
                   {conference.status}
                 </span>

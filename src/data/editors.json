@@ -5,7 +5,9 @@
     "role": "Director & Chief Editor",
     "institution": "Conference Event / Mindgates Softtech",
     "image": "/images/banners/hero-v2.png",
-    "category": "Chief"
+    "category": "Chief",
+    "email": "naseer@mindgatesresearch.in",
+    "contact": "+91 7006472072"
   },
   {
     "id": "ed-2",
@@ -13,7 +15,9 @@
     "role": "Associate Editor",
     "institution": "Department of Artificial Intelligence, MIT",
     "image": "/images/banners/hero-v2.png",
-    "category": "Associate"
+    "category": "Associate",
+    "email": "sarah.j@mit.edu",
+    "contact": "+1 617 555 0123"
   },
   {
     "id": "ed-3",
@@ -21,7 +25,9 @@
     "role": "Technical Advisor",
     "institution": "School of Computer Science, Stanford",
     "image": "/images/banners/hero-v2.png",
-    "category": "Advisory"
+    "category": "Advisory",
+    "email": "d.miller@stanford.edu",
+    "contact": "+1 650 555 0456"
   },
   {
     "id": "ed-4",
@@ -29,6 +35,8 @@
     "role": "Council Member",
     "institution": "Institute of Sustainable Technology, Madrid",
     "image": "/images/banners/hero-v2.png",
-    "category": "Council"
+    "category": "Council",
+    "email": "elena.r@ist.es",
+    "contact": "+34 91 555 0789"
   }
 ]

@@ -15,10 +15,11 @@ export default function AboutPage() {
               Our Organization
             </div>
             <h1 className="text-6xl md:text-8xl font-serif font-bold text-foreground leading-[0.9]">
-              Simplifying <span className="text-primary italic">Research</span> for Everyone
+              Mindgates Research <br />
+              <span className="text-primary italic">conference forum</span>
             </h1>
             <p className="text-xl text-foreground/60 leading-relaxed font-medium max-w-xl">
-              Conference Event is a global platform dedicated to advancing scholarly discourse through high-impact conferences and academic publishing.
+              Mindgates Research conference forum is a global platform dedicated to advancing scholarly discourse through high-impact conferences and academic publishing.
             </p>
           </div>
           <div className="relative">
@@ -128,7 +129,7 @@ export default function AboutPage() {
            <div className="space-y-8">
               <h2 className="text-4xl md:text-5xl font-serif font-bold">Managed by <br/><span className="text-primary">Mindgates Softtech Solutions</span></h2>
               <p className="text-xl text-white/60 leading-relaxed font-light">
-                Mindgates Softtech Solutions Pvt Ltd is the technical and organizational backbone of Conference Event, providing the infrastructure and expertise needed to manage large-scale academic events seamlessly.
+                Mindgates Softtech Solutions Pvt Ltd is the technical and organizational backbone of Mindgates Research conference forum, providing the infrastructure and expertise needed to manage large-scale academic events seamlessly.
               </p>
               <div className="flex gap-12 pt-8">
                  <div>

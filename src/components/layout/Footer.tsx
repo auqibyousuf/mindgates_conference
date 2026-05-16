@@ -41,18 +41,28 @@ export default function Footer() {
           {/* Contact Info */}
           <div>
             <h4 className="font-serif text-lg font-bold mb-6">Contact Us</h4>
-            <ul className="space-y-4">
+            <ul className="space-y-6">
               <li className="flex items-start gap-3 text-sm text-white/60">
                 <MapPin className="size-5 text-primary shrink-0" />
-                <span>{siteConfig.contact.address}</span>
+                <div className="space-y-2">
+                  <p className="font-bold text-white/80">Srinagar Office:</p>
+                  <p>Mindgates Softtech Solutions, Bulbul Bagh Barzulla Srinagar-190005</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-white/60">
+                <MapPin className="size-5 text-primary shrink-0" />
+                <div className="space-y-2">
+                  <p className="font-bold text-white/80">Jammu Office:</p>
+                  <p>Anand Nagar Bohri Jammu</p>
+                </div>
               </li>
               <li className="flex items-center gap-3 text-sm text-white/60">
                 <Phone className="size-5 text-primary shrink-0" />
-                <span>{siteConfig.contact.phone}</span>
+                <span>7006472072, 6005221157</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-white/60">
                 <Mail className="size-5 text-primary shrink-0" />
-                <span>{siteConfig.contact.email}</span>
+                <span>info@mindgatesresearch.in</span>
               </li>
             </ul>
           </div>
@@ -76,7 +86,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-white/40">
-            © {new Date().getFullYear()} Conference Event. All rights reserved.
+            © {new Date().getFullYear()} Mindgates Research conference forum. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link href="#" className="text-xs text-white/40 hover:text-white transition-colors">Privacy Policy</Link>

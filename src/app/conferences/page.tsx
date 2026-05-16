@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, Search, Globe, MapPin } from 'lucide-react';
+import { Calendar, Search, Globe, MapPin, FileText, Download, ExternalLink } from 'lucide-react';
 import conferences from '@/data/conferences.json';
-import { ConferenceCard } from '@/components/ConferenceCard';
+import { DataTable, Column } from '@/components/DataTable';
 
+type Conference = typeof conferences[0];
 type ConferenceStatus = 'All' | 'Upcoming' | 'Past';
 
 export default function ConferencesPage() {
@@ -18,6 +19,59 @@ export default function ConferencesPage() {
       conf.venue.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesTab && matchesSearch;
   });
+
+  const columns: Column<Conference>[] = [
+    { 
+      header: 'Conference Title', 
+      accessor: (conf) => (
+        <div className="flex flex-col gap-1">
+          <span className="text-foreground font-bold text-base">{conf.title}</span>
+          <span className="text-[10px] uppercase tracking-widest text-primary/60 font-black">{conf.type} Conference</span>
+        </div>
+      ),
+      className: "min-w-[300px]"
+    },
+    { 
+      header: 'Date', 
+      accessor: (conf) => (
+        <div className="flex items-center gap-2">
+          <Calendar className="size-4 text-primary/40" />
+          <span>{conf.date}</span>
+        </div>
+      )
+    },
+    { 
+      header: 'Venue', 
+      accessor: (conf) => (
+        <div className="flex items-center gap-2">
+          <MapPin className="size-4 text-primary/40" />
+          <span>{conf.venue}</span>
+        </div>
+      )
+    },
+    { 
+      header: activeTab === 'Past' ? 'Proceedings' : 'Details', 
+      accessor: (conf) => {
+        const url = activeTab === 'Past' ? conf.proceedingsUrl : conf.brochureUrl;
+        const label = activeTab === 'Past' ? 'Download Proceedings' : 'View Brochure';
+        
+        return url ? (
+          <a 
+            href={url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all font-bold text-xs border border-primary/10"
+          >
+            {activeTab === 'Past' ? <Download className="size-3.5" /> : <FileText className="size-3.5" />}
+            {label}
+          </a>
+        ) : (
+          <span className="text-foreground/20 italic text-xs">Not Available</span>
+        );
+      },
+      className: "text-right"
+    }
+  ];
 
   return (
     <main className="min-h-screen bg-background pt-32 pb-20">
@@ -58,7 +112,7 @@ export default function ConferencesPage() {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`
-                  px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all
+                  px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all cursor-pointer
                   ${activeTab === tab 
                     ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                     : 'text-foreground/40 hover:text-foreground hover:bg-foreground/5'}
@@ -74,30 +128,14 @@ export default function ConferencesPage() {
         <div className="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[150px] -z-10" />
       </section>
 
-      {/* Grid Section */}
+      {/* Table Section */}
       <section className="px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
-          {filteredConferences.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {filteredConferences.map((conf) => (
-                <ConferenceCard key={conf.id} conf={conf} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-40 glass-card bg-white/30 border-white/40">
-              <div className="size-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-8 animate-pulse">
-                <Calendar className="size-10 text-primary/40" />
-              </div>
-              <h3 className="text-2xl font-serif font-bold text-foreground/60 mb-2">No conferences found</h3>
-              <p className="text-foreground/40 font-medium">Try adjusting your filters or search terms.</p>
-              <button 
-                onClick={() => { setActiveTab('All'); setSearchQuery(''); }}
-                className="mt-8 text-primary font-black uppercase tracking-widest text-[10px] hover:underline"
-              >
-                Clear all filters
-              </button>
-            </div>
-          )}
+          <DataTable 
+            columns={columns} 
+            data={filteredConferences} 
+            emptyMessage={`No ${activeTab.toLowerCase()} conferences found matching your search.`} 
+          />
         </div>
       </section>
 
@@ -111,7 +149,7 @@ export default function ConferencesPage() {
               </div>
               <h3 className="text-3xl font-serif font-bold">Host a Conference</h3>
               <p className="text-lg text-foreground/70 leading-relaxed">
-                Interested in partnering with Conference Event to host your next scholarly gathering? We provide full-scale logistical and promotional support.
+                Interested in partnering with Mindgates Research conference forum to host your next scholarly gathering? We provide full-scale logistical and promotional support.
               </p>
               <button className="glass-button bg-foreground border-none">Get Partnership Info</button>
             </div>

@@ -187,11 +187,67 @@ export default function AdminPage() {
   );
 }
 
+function FileUpload({ onUpload }: { onUpload: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        onUpload(data.url);
+      } else {
+        alert(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      alert('Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="relative group">
+      <input
+        type="file"
+        id="file-upload"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+      <label
+        htmlFor="file-upload"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest cursor-pointer hover:bg-primary/20 transition-all"
+      >
+        {uploading ? <RefreshCw className="size-3 animate-spin" /> : <Plus className="size-3" />}
+        Upload File
+      </label>
+    </div>
+  );
+}
+
 function FieldEditor({ label, value, onChange, isNested = false }: { label: string, value: unknown, onChange: (val: unknown) => void, isNested?: boolean }) {
+  const isFilePath = label.toLowerCase().includes('url') || 
+                   label.toLowerCase().includes('image') || 
+                   label.toLowerCase().includes('brochure') || 
+                   label.toLowerCase().includes('proceedings') || 
+                   label.toLowerCase().includes('src');
+
   if (Array.isArray(value)) {
     return (
       <div className={`space-y-3 ${isNested ? 'pl-4 border-l-2 border-primary/10 py-2' : ''}`}>
-        <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 ml-1 block">{label.replace(/([A-Z])/g, ' $1')}</label>
+        <div className="flex justify-between items-center">
+           <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 ml-1 block">{label.replace(/([A-Z])/g, ' $1')}</label>
+        </div>
         <div className="space-y-2">
           {value.map((item: string, i: number) => (
             <div key={i} className="flex gap-2 group">
@@ -251,7 +307,10 @@ function FieldEditor({ label, value, onChange, isNested = false }: { label: stri
 
   return (
     <div className="space-y-1.5">
-      <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 ml-1 block">{label.replace(/([A-Z])/g, ' $1')}</label>
+      <div className="flex justify-between items-center">
+        <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 ml-1 block">{label.replace(/([A-Z])/g, ' $1')}</label>
+        {isFilePath && <FileUpload onUpload={(url) => onChange(url)} />}
+      </div>
       {isLongText ? (
         <textarea 
           value={stringValue}

@@ -69,14 +69,23 @@ export default function ContactPage() {
            <div className="space-y-12">
               <div className="space-y-8">
                  <h3 className="text-3xl font-serif font-bold text-foreground">Contact Information</h3>
-                 <div className="space-y-6">
+                  <div className="space-y-6">
                     <div className="flex items-start gap-6 p-6 rounded-3xl bg-primary/5 border border-primary/10">
                        <div className="size-12 rounded-2xl bg-primary flex items-center justify-center shrink-0">
                           <MapPin className="size-6 text-white" />
                        </div>
                        <div className="space-y-1">
-                          <p className="text-[10px] uppercase font-black tracking-widest text-primary">Office Address</p>
-                          <p className="text-foreground/70 font-medium leading-relaxed">{siteConfig.contact.address}</p>
+                          <p className="text-[10px] uppercase font-black tracking-widest text-primary">Srinagar Office</p>
+                          <p className="text-foreground/70 font-medium leading-relaxed">Mindgates Softtech Solutions, Bulbul Bagh Barzulla Srinagar-190005</p>
+                       </div>
+                    </div>
+                    <div className="flex items-start gap-6 p-6 rounded-3xl bg-primary/5 border border-primary/10">
+                       <div className="size-12 rounded-2xl bg-primary flex items-center justify-center shrink-0">
+                          <MapPin className="size-6 text-white" />
+                       </div>
+                       <div className="space-y-1">
+                          <p className="text-[10px] uppercase font-black tracking-widest text-primary">Jammu Office</p>
+                          <p className="text-foreground/70 font-medium leading-relaxed">Anand Nagar Bohri Jammu</p>
                        </div>
                     </div>
                     <div className="flex items-center gap-6 p-6 rounded-3xl bg-white shadow-xl shadow-foreground/5 border border-foreground/5">
@@ -84,8 +93,8 @@ export default function ContactPage() {
                           <Phone className="size-6 text-white" />
                        </div>
                        <div className="space-y-1">
-                          <p className="text-[10px] uppercase font-black tracking-widest text-foreground/40">Phone Number</p>
-                          <p className="text-foreground/70 font-bold">{siteConfig.contact.phone}</p>
+                          <p className="text-[10px] uppercase font-black tracking-widest text-foreground/40">Phone Numbers</p>
+                          <p className="text-foreground/70 font-bold">7006472072, 6005221157</p>
                        </div>
                     </div>
                     <div className="flex items-center gap-6 p-6 rounded-3xl bg-white shadow-xl shadow-foreground/5 border border-foreground/5">
@@ -94,10 +103,10 @@ export default function ContactPage() {
                        </div>
                        <div className="space-y-1">
                           <p className="text-[10px] uppercase font-black tracking-widest text-foreground/40">Email Address</p>
-                          <p className="text-foreground/70 font-bold">{siteConfig.contact.email}</p>
+                          <p className="text-foreground/70 font-bold">info@mindgatesresearch.in</p>
                        </div>
                     </div>
-                 </div>
+                  </div>
               </div>
 
               <div className="space-y-6 pt-12 border-t border-foreground/5">

@@ -1,14 +1,70 @@
-import { Award, Trophy, Star, Calendar, MapPin, Search } from "lucide-react";
+import { Award, Trophy, Star, Calendar, MapPin, Search, Medal } from "lucide-react";
 import awards from "@/data/awards.json";
-import { AwardCard } from "@/components/AwardCard";
+import { DataTable, Column } from "@/components/DataTable";
 import { GlassContainer } from "@/components/GlassContainer";
 
+type AwardEntry = typeof awards[0];
+
 export default function AwardsPage() {
+  const columns: Column<AwardEntry>[] = [
+    {
+      header: 'Recipient',
+      accessor: (award) => (
+        <div className="flex flex-col gap-0.5">
+          <span className="text-foreground font-bold text-base">{award.authorName}</span>
+          <span className="text-[10px] uppercase tracking-widest text-primary/60 font-black">Researcher</span>
+        </div>
+      ),
+      className: "min-w-[200px]"
+    },
+    {
+      header: 'Project/Paper Title',
+      accessor: (award) => (
+        <span className="text-foreground/80 font-medium italic">"{award.title}"</span>
+      ),
+      className: "min-w-[250px]"
+    },
+    {
+      header: 'Event Name',
+      accessor: (award) => (
+        <div className="flex items-center gap-2">
+          <div className="size-2 rounded-full bg-primary/20" />
+          <span>{award.eventName}</span>
+        </div>
+      )
+    },
+    {
+      header: 'Event Date & Venue',
+      accessor: (award) => (
+        <div className="flex flex-col gap-1 text-[12px]">
+          <div className="flex items-center gap-1.5 text-foreground/40">
+             <Calendar className="size-3" />
+             <span>{award.eventDate}</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-foreground/40">
+             <MapPin className="size-3" />
+             <span>{award.eventVenue || 'Online'}</span>
+          </div>
+        </div>
+      )
+    },
+    {
+      header: 'Award Category',
+      accessor: (award) => (
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
+          <Medal className="size-3" />
+          {award.awardName}
+        </div>
+      ),
+      className: "text-right"
+    }
+  ];
+
   return (
     <div className="pt-32 pb-24 min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="max-w-3xl mb-16 space-y-6">
+        <div className="max-w-3xl mb-16 space-y-6 text-left">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]">
             Excellence Recognized
           </div>
@@ -44,11 +100,17 @@ export default function AwardsPage() {
           </div>
         </GlassContainer>
 
-        {/* Awards List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {awards.map((award) => (
-            <AwardCard key={award.id} award={award} />
-          ))}
+        {/* Awards Table */}
+        <div className="space-y-8">
+          <div className="flex items-center gap-4">
+            <h3 className="text-2xl font-serif font-bold text-foreground">Award Recipients</h3>
+            <div className="h-px grow bg-foreground/5" />
+          </div>
+          <DataTable 
+            columns={columns} 
+            data={awards} 
+            emptyMessage="The hall of fame is currently being updated." 
+          />
         </div>
       </div>
     </div>

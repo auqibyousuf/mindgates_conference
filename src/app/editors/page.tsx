@@ -1,15 +1,17 @@
 import React from 'react';
 import Image from 'next/image';
-import { Mail, Linkedin, GraduationCap, UserCheck } from 'lucide-react';
+import { Mail, Linkedin, GraduationCap, UserCheck, Phone } from 'lucide-react';
 import editors from '@/data/editors.json';
 import { GlassContainer } from '@/components/GlassContainer';
+
+type Editor = typeof editors[0];
 
 export default function EditorsPage() {
   const categories = ["Chief", "Associate", "Advisory", "Council"];
 
   return (
     <main className="min-h-screen pt-32 pb-24 bg-background">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="section-container">
         {/* Header */}
         <div className="max-w-3xl mb-24 space-y-8">
            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]">
@@ -19,7 +21,7 @@ export default function EditorsPage() {
               Governing <span className="text-primary italic">Council</span> & Editorial Board
             </h1>
             <p className="text-xl text-foreground/60 leading-relaxed font-medium">
-              Our board comprises distinguished scholars and industry leaders who guide the academic direction of Conference Event.
+              Our board comprises distinguished scholars and industry leaders who guide the academic direction of Mindgates Research conference forum.
             </p>
         </div>
 
@@ -48,18 +50,23 @@ export default function EditorsPage() {
                     <p className="text-xl text-white/60 leading-relaxed font-light">
                       With over a decade of experience in academic publishing and event management, {chief.name} leads the strategic vision of the organization, ensuring global standards in research dissemination.
                     </p>
-                    <div className="flex gap-6 pt-4">
-                       <div className="flex items-center gap-3 text-sm text-white/40">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                       <div className="flex items-center gap-3 text-sm text-white/60 hover:text-primary transition-colors">
                           <GraduationCap className="size-5 text-primary" />
                           <span>{chief.institution}</span>
                        </div>
+                       <div className="flex items-center gap-3 text-sm text-white/60 hover:text-primary transition-colors">
+                          <Mail className="size-5 text-primary" />
+                          <span>{chief.email}</span>
+                       </div>
+                       <div className="flex items-center gap-3 text-sm text-white/60 hover:text-primary transition-colors">
+                          <Phone className="size-5 text-primary" />
+                          <span>{chief.contact}</span>
+                       </div>
                     </div>
-                    <div className="flex gap-4 pt-8">
-                       <button className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-primary transition-colors">
+                    <div className="flex gap-4 pt-4">
+                       <button className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-primary transition-colors cursor-pointer">
                           <Linkedin className="size-5" />
-                       </button>
-                       <button className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-primary transition-colors">
-                          <Mail className="size-5" />
                        </button>
                     </div>
                  </div>
@@ -79,8 +86,8 @@ export default function EditorsPage() {
                
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {editors.filter(e => e.category === category).map((member) => (
-                    <GlassContainer key={member.id} variant="light" hover className="p-8 group">
-                       <div className="space-y-6">
+                    <GlassContainer key={member.id} variant="light" hover className="p-8 group flex flex-col h-full">
+                       <div className="space-y-6 flex-grow">
                           <div className="flex items-start justify-between">
                              <div className="aspect-square w-24 rounded-2xl overflow-hidden border-4 border-white shadow-lg relative grayscale group-hover:grayscale-0 transition-all">
                                 <Image 
@@ -100,8 +107,19 @@ export default function EditorsPage() {
                              <p className="text-primary font-bold text-sm italic">{member.role}</p>
                           </div>
 
-                          <div className="pt-4 border-t border-foreground/5">
-                             <p className="text-xs text-foreground/40 font-medium uppercase tracking-widest">{member.institution}</p>
+                          <div className="space-y-3 pt-4 border-t border-foreground/5">
+                             <div className="flex items-center gap-2 text-[11px] text-foreground/40 font-medium uppercase tracking-widest">
+                                <GraduationCap className="size-3.5 text-primary/40" />
+                                <span className="line-clamp-1">{member.institution}</span>
+                             </div>
+                             <div className="flex items-center gap-2 text-[11px] text-foreground/60 font-bold">
+                                <Mail className="size-3.5 text-primary/60" />
+                                <span>{member.email}</span>
+                             </div>
+                             <div className="flex items-center gap-2 text-[11px] text-foreground/60 font-bold">
+                                <Phone className="size-3.5 text-primary/60" />
+                                <span>{member.contact}</span>
+                             </div>
                           </div>
                        </div>
                     </GlassContainer>

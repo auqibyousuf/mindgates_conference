@@ -17,7 +17,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/banners/hero-v2.png"
-            alt="Conference Event Hero"
+            alt="Mindgates Research conference forum Hero"
             fill
             className="object-cover brightness-[0.5] scale-105 animate-slow-zoom"
             priority
@@ -30,7 +30,7 @@ export default function Home() {
           <div className="max-w-3xl space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 backdrop-blur-md">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">Scholarly Excellence Since 2012</span>
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">Mindgates Research conference forum</span>
             </div>
             
             <h1 className="text-6xl md:text-8xl font-serif font-bold text-white leading-[1.05]">
@@ -43,6 +43,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl text-white/80 leading-relaxed max-w-2xl font-medium">
+              (A Unit of Mindgates Softtech Solutions Pvt Ltd.)<br />
               {siteConfig.description}
             </p>
 
@@ -78,7 +79,7 @@ export default function Home() {
 
       {/* Notification Bar */}
       <section className="bg-primary py-4 relative z-20 shadow-lg overflow-hidden border-y border-white/10">
-        <div className="max-w-7xl mx-auto px-6 flex items-center relative">
+        <div className="section-container flex items-center relative">
           <div className="flex items-center gap-2 text-white font-black text-[10px] uppercase tracking-[0.2em] whitespace-nowrap shrink-0 px-4 py-2 bg-primary rounded-lg border border-white/20 shadow-xl z-30 mr-8">
             <Bell className="size-4 animate-bounce" />
             Live Updates
@@ -251,7 +252,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-32 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="glass-card bg-primary p-16 md:p-24 relative overflow-hidden shadow-[0_48px_80px_-16px_rgba(14,147,132,0.4)] border-none">
+          <div className="glass-card bg-primary p-16 md:p-24 relative overflow-hidden shadow-[0_48px_80px_-16px_rgba(49,46,129,0.4)] border-none">
             <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
             <div className="absolute bottom-0 left-0 w-80 h-80 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
             

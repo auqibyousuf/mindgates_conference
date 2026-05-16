@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Conference Event | Simplifying Research & Publishing",
+  title: "Mindgates Research conference forum | Elevating Scholarly Excellence",
   description: "A premier organization for scholarly study, facilitating National and International Conferences and academic publishing.",
 };
 

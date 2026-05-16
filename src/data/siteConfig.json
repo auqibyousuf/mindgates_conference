@@ -1,13 +1,23 @@
 {
-  "name": "Conference Event",
-  "tagline": "Simplifying Research & Publishing",
-  "description": "A premier organization for scholarly study, committed to giving researchers from all around the world a vibrant forum. From beginning we have successfully organized National and International Conferences at prestigious institutions all over the India.",
-  "directorMessage": "Welcome to Conference Event. We are dedicated to fostering academic excellence through global collaboration and high-quality publishing. Our platform serves as a bridge between innovative research and its dissemination to the world.",
+  "name": "Mindgates Research conference forum",
+  "tagline": "(A Unit of Mindgates Softtech Solutions Pvt Ltd.)",
+  "description": "A premier organization for scholarly study, Mindgates Research conference forum is committed to giving researchers from all around the world a vibrant forum. From beginning we have successfully organized National and International Conferences at prestigious institutions all over the India.",
+  "hero": {
+    "badge": "Mindgates Research conference forum",
+    "titleLine1": "Elevating",
+    "titleItalic": "Scholarly",
+    "titleLine2": "Excellence",
+    "description": "A premier organization for scholarly study, Mindgates Research conference forum is committed to giving researchers from all around the world a vibrant forum.",
+    "image": "/images/banners/hero-v2.png",
+    "primaryButton": { "label": "Explore Conferences", "link": "/conferences" },
+    "secondaryButton": { "label": "Our Mission", "link": "/about" }
+  },
+  "directorMessage": "Welcome to Mindgates Research conference forum. We are dedicated to fostering academic excellence through global collaboration and high-quality publishing. Our platform serves as a bridge between innovative research and its dissemination to the world.",
   "contact": {
-    "address": "Mindgates Softtech Solutions, Bulbul Bagh Barzulla Srinagar-190005",
-    "phone": "7006472072",
-    "email": "info@conferenceevent.in",
-    "website": "conferenceevent.in"
+    "address": "Mindgates Softtech Solutions, Bulbul Bagh Barzulla Srinagar-190005 | Jammu Office: Anand Nagar Bohri Jammu",
+    "phone": "7006472072, 6005221157",
+    "email": "info@mindgatesresearch.in",
+    "website": "mindgatesresearch.in"
   },
   "socials": {
     "facebook": "#",
