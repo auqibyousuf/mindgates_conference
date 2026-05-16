@@ -1,0 +1,13 @@
+{
+  "heroStats": [
+    { "icon": "Users", "label": "Researchers", "value": "5,000+" },
+    { "icon": "Calendar", "label": "Conferences", "value": "50+" },
+    { "icon": "BookOpen", "label": "Books", "value": "100+" }
+  ],
+  "globalStats": [
+    { "label": "Conferences", "value": "500+" },
+    { "label": "Researchers", "value": "12k+" },
+    { "label": "Institutions", "value": "150+" },
+    { "label": "Years", "value": "10+" }
+  ]
+}

@@ -7,36 +7,44 @@
     "image": "/images/banners/hero-v2.png",
     "category": "Chief",
     "email": "naseer@mindgatesresearch.in",
-    "contact": "+91 7006472072"
+    "contact": "+91 7006472072",
+    "country": "India",
+    "bio": "Expert in Software Engineering and Academic Publication Standards."
   },
   {
     "id": "ed-2",
     "name": "Dr. Sarah Johnson",
-    "role": "Associate Editor",
-    "institution": "Department of Artificial Intelligence, MIT",
+    "role": "Executive Associate Editor",
+    "institution": "MIT, Cambridge",
     "image": "/images/banners/hero-v2.png",
-    "category": "Associate",
+    "category": "Executive",
     "email": "sarah.j@mit.edu",
-    "contact": "+1 617 555 0123"
+    "contact": "+1 617 555 0123",
+    "country": "USA",
+    "bio": "Leading researcher in Neural Networks and Machine Learning."
   },
   {
     "id": "ed-3",
     "name": "Prof. David Miller",
-    "role": "Technical Advisor",
-    "institution": "School of Computer Science, Stanford",
+    "role": "Global Advisory Head",
+    "institution": "Stanford University",
     "image": "/images/banners/hero-v2.png",
     "category": "Advisory",
     "email": "d.miller@stanford.edu",
-    "contact": "+1 650 555 0456"
+    "contact": "+1 650 555 0456",
+    "country": "USA",
+    "bio": "Distinguished Professor with over 200 citations in CS."
   },
   {
     "id": "ed-4",
     "name": "Dr. Elena Rodriguez",
-    "role": "Council Member",
-    "institution": "Institute of Sustainable Technology, Madrid",
+    "role": "Governing Council Member",
+    "institution": "Madrid Institute of Tech",
     "image": "/images/banners/hero-v2.png",
     "category": "Council",
     "email": "elena.r@ist.es",
-    "contact": "+34 91 555 0789"
+    "contact": "+34 91 555 0789",
+    "country": "Spain",
+    "bio": "Specialist in Sustainable Tech and Green Computing."
   }
 ]

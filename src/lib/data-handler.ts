@@ -3,6 +3,8 @@ import conferencesDefault from '@/data/conferences.json';
 import booksDefault from '@/data/books.json';
 import awardsDefault from '@/data/awards.json';
 import editorsDefault from '@/data/editors.json';
+import notificationsDefault from '@/data/notifications.json';
+import statsDefault from '@/data/stats.json';
 
 /**
  * Robust data handler that works both locally (Filesystem) 
@@ -30,6 +32,8 @@ const DEFAULT_DATA: Record<string, unknown> = {
   'books.json': booksDefault,
   'awards.json': awardsDefault,
   'editors.json': editorsDefault,
+  'notifications.json': notificationsDefault,
+  'stats.json': statsDefault,
 };
 
 export async function readData(filename: string): Promise<unknown> {

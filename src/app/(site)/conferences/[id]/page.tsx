@@ -7,12 +7,7 @@ import {
 } from "lucide-react";
 import { readData } from "@/lib/data-handler";
 import { Conference } from "@/lib/types";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+import { cn } from "@/lib/utils";
 
 export default async function ConferenceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

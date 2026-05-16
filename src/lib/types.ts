@@ -24,7 +24,6 @@ export interface SiteConfig {
     twitter: string;
     linkedin: string;
   };
-  notifications: string[];
 }
 
 export interface Conference {
@@ -65,4 +64,6 @@ export interface Editor {
   category: string;
   email: string;
   contact: string;
+  country?: string;
+  bio?: string;
 }

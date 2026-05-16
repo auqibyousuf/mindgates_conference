@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Mindgates Research conference forum | Elevating Scholarly Excellence",
@@ -14,15 +12,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className="antialiased min-h-screen flex flex-col"
+        suppressHydrationWarning
       >
-        <Navbar />
         <main className="grow">
           {children}
         </main>
-        <Footer />
       </body>
     </html>
   );
