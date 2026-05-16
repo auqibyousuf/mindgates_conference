@@ -15,7 +15,8 @@ let getKV: (() => { env: Record<string, any> }) | null = null; // eslint-disable
 async function initCloudflare() {
   if (getKV) return;
   try {
-    // @ts-expect-error - This module only exists in Cloudflare runtime
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - This module only exists in Cloudflare runtime
     const cf = await import('@opennextjs/cloudflare');
     getKV = cf.getCloudflareContext;
   } catch {
@@ -37,11 +38,15 @@ export async function readData(filename: string): Promise<unknown> {
     
     // 1. Try Cloudflare KV first (Production)
     if (getKV) {
-      const ctx = getKV();
-      const kv = ctx?.env?.MINDGATES_DATA;
-      if (kv) {
-        const data = await kv.get(filename);
-        if (data) return JSON.parse(data);
+      try {
+        const ctx = getKV();
+        const kv = ctx?.env?.MINDGATES_DATA;
+        if (kv) {
+          const data = await kv.get(filename);
+          if (data) return JSON.parse(data);
+        }
+      } catch {
+        // Expected to fail during build/static generation
       }
     }
 
@@ -74,11 +79,15 @@ export async function writeData(filename: string, data: unknown) {
 
     // 1. Try Cloudflare KV first (Production)
     if (getKV) {
-      const ctx = getKV();
-      const kv = ctx?.env?.MINDGATES_DATA;
-      if (kv) {
-        await kv.put(filename, JSON.stringify(data));
-        return { success: true, storage: 'kv' };
+      try {
+        const ctx = getKV();
+        const kv = ctx?.env?.MINDGATES_DATA;
+        if (kv) {
+          await kv.put(filename, JSON.stringify(data));
+          return { success: true, storage: 'kv' };
+        }
+      } catch {
+        // Not in Cloudflare environment or build-time
       }
     }
 
