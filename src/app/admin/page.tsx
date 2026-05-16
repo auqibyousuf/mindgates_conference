@@ -427,7 +427,13 @@ function FieldEditor({ label, value, onChange, isNested = false }: { label: stri
     );
   }
 
-  const isLongText = stringValue.length > 100 || label.toLowerCase().includes('message') || label.toLowerCase().includes('description');
+  const isLongText = stringValue.length > 100 || label.toLowerCase().includes('message') || label.toLowerCase().includes('description') || label.toLowerCase().includes('bio');
+  const isCategoryField = label.toLowerCase() === 'category' || label.toLowerCase() === 'type' || label.toLowerCase() === 'icon';
+
+  const EDITOR_CATEGORIES = ["Chief", "Executive", "Associate", "Advisory", "Council", "Reviewer"];
+  const NOTIFICATION_CATEGORIES = ["News", "Update", "Deadline", "Alert"];
+  const CONF_TYPES = ["International", "National"];
+  const STAT_ICONS = ["Users", "Calendar", "BookOpen", "Award", "Globe"];
 
   return (
     <div className="space-y-2">
@@ -441,6 +447,19 @@ function FieldEditor({ label, value, onChange, isNested = false }: { label: stri
           onChange={(e) => onChange(e.target.value)}
           className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all min-h-24 leading-relaxed"
         />
+      ) : isCategoryField ? (
+        <select
+          value={stringValue}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer appearance-none"
+        >
+          <option value="">Select {label}...</option>
+          {(label.toLowerCase() === 'category' ? [...EDITOR_CATEGORIES, ...NOTIFICATION_CATEGORIES] : 
+            label.toLowerCase() === 'type' ? CONF_TYPES : 
+            STAT_ICONS).filter((v, i, a) => a.indexOf(v) === i).map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
       ) : isLinkField && !isCustomLink ? (
         <SearchableLinkPicker
           value={stringValue}
@@ -660,46 +679,58 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
                {/* Accent bar */}
                <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary/10 group-hover:w-1.5 group-hover:bg-primary transition-all duration-300" />
 
-               <div className="grow space-y-1.5 pl-2">
-                   <div className="flex items-center gap-2">
-                    <h3 className="font-serif font-bold text-[15px] text-foreground group-hover:text-primary transition-colors duration-300">
-                      {String(it.title || it.name || it.awardName || it.text || `Item ${i + 1}`)}
-                    </h3>
-                    {(it.active === true || it.status === "Upcoming") && (
-                      <span className="size-2 rounded-full bg-primary animate-pulse shadow-sm shadow-primary/20" />
-                    )}
-                  </div>
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                    <p className="text-[10px] text-foreground/40 font-black uppercase tracking-[0.2em] flex items-center gap-2">
-                      {[
-                        it.role,
-                        it.author,
-                        it.authorName,
-                        it.category,
-                        it.type,
-                        it.date || it.eventDate,
-                        it.institution
-                      ].filter(Boolean).map((part, idx, arr) => (
-                        <React.Fragment key={idx}>
-                          <span className="text-foreground/60">{String(part)}</span>
-                          {idx < arr.length - 1 && <span className="text-primary/20 text-[8px]">•</span>}
-                        </React.Fragment>
-                      ))}
-                    </p>
-                    {!!(it.venue || it.eventVenue) && (
-                      <p className="text-[10px] text-primary/40 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                        <span className="size-1 rounded-full bg-primary/20" />
-                        {String(it.venue || it.eventVenue)}
-                      </p>
-                    )}
-                    {!!(it.link || it.url || it.href || it.heroButtonLink || it.primaryButtonLink || it.secondaryButtonLink || it.brochureUrl || it.proceedingsUrl) && (
-                      <p className="text-[10px] text-primary/60 font-medium lowercase tracking-tight flex items-center gap-1.5">
-                        <span className="size-1 rounded-full bg-primary/40" />
-                        {String(it.link || it.url || it.href || it.heroButtonLink || it.primaryButtonLink || it.secondaryButtonLink || it.brochureUrl || it.proceedingsUrl)}
-                      </p>
-                    )}
-                  </div>
-               </div>
+              <div className="grow flex items-center gap-6 pl-2">
+                 {!!(it.image || it.imageUrl) && (
+                   <div className="relative size-12 rounded-xl overflow-hidden border-2 border-white shadow-sm shrink-0">
+                     <NextImage 
+                       src={String(it.image || it.imageUrl)} 
+                       alt=""
+                       fill
+                       className="object-cover"
+                     />
+                   </div>
+                 )}
+                 <div className="grow space-y-1.5">
+                    <div className="flex items-center gap-2">
+                     <h3 className="font-serif font-bold text-[15px] text-foreground group-hover:text-primary transition-colors duration-300">
+                       {String(it.title || it.name || it.awardName || it.text || `Item ${i + 1}`)}
+                     </h3>
+                     {(it.active === true || it.status === "Upcoming") && (
+                       <span className="size-2 rounded-full bg-primary animate-pulse shadow-sm shadow-primary/20" />
+                     )}
+                   </div>
+                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                     <p className="text-[10px] text-foreground/40 font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                       {[
+                         it.role,
+                         it.author,
+                         it.authorName,
+                         it.category,
+                         it.type,
+                         it.date || it.eventDate,
+                         it.institution
+                       ].filter(Boolean).map((part, idx, arr) => (
+                         <React.Fragment key={idx}>
+                           <span className="text-foreground/60">{String(part)}</span>
+                           {idx < arr.length - 1 && <span className="text-primary/20 text-[8px]">•</span>}
+                         </React.Fragment>
+                       ))}
+                     </p>
+                     {!!(it.venue || it.eventVenue) && (
+                       <p className="text-[10px] text-primary/40 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                         <span className="size-1 rounded-full bg-primary/20" />
+                         {String(it.venue || it.eventVenue)}
+                       </p>
+                     )}
+                     {!!(it.link || it.url || it.href || it.heroButtonLink || it.primaryButtonLink || it.secondaryButtonLink || it.brochureUrl || it.proceedingsUrl) && (
+                       <p className="text-[10px] text-primary/60 font-medium lowercase tracking-tight flex items-center gap-1.5">
+                         <span className="size-1 rounded-full bg-primary/40" />
+                         {String(it.link || it.url || it.href || it.heroButtonLink || it.primaryButtonLink || it.secondaryButtonLink || it.brochureUrl || it.proceedingsUrl)}
+                       </p>
+                     )}
+                   </div>
+                 </div>
+              </div>
 
                <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300">
