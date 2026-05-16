@@ -3,9 +3,27 @@
     "id": "award-1",
     "authorName": "Dr. Sarah Johnson",
     "title": "Sustainable AI in Research",
-    "eventName": "International Conference on Research",
-    "eventDate": "Nov 2024",
+    "eventName": "Global Innovation Summit 2026",
+    "eventDate": "Jan 2026",
     "eventVenue": "SSM College",
     "awardName": "Best Researcher Award"
+  },
+  {
+    "id": "award-2",
+    "authorName": "Prof. Michael Chen",
+    "title": "Quantum Computing Applications",
+    "eventName": "National Research Symposium",
+    "eventDate": "Mar 2026",
+    "eventVenue": "University of Delhi",
+    "awardName": "Innovation in Technology Award"
+  },
+  {
+    "id": "award-3",
+    "authorName": "Dr. Elena Rodriguez",
+    "title": "Ethical Frameworks in Bio-Engineering",
+    "eventName": "Academic Excellence Forum 2025",
+    "eventDate": "Nov 2025",
+    "eventVenue": "Grand Academic Plaza",
+    "awardName": "Outstanding Contribution to Ethics"
   }
 ]

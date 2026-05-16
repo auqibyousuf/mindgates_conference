@@ -9,6 +9,12 @@
     "titleLine2": "Excellence",
     "description": "A premier organization for scholarly study, Mindgates Research conference forum is committed to giving researchers from all around the world a vibrant forum.",
     "image": "/images/banners/hero-v2.png",
+    "aboutImage": "/images/banners/main-hero.png",
+    "editorsImage": "/images/banners/hero-v2.png",
+    "conferencesImage": "/images/banners/main-hero.png",
+    "awardsImage": "/images/banners/main-hero.png",
+    "booksImage": "/images/banners/main-hero.png",
+    "galleryImage": "/images/banners/main-hero.png",
     "primaryButton": { "label": "Explore Conferences", "link": "/conferences" },
     "secondaryButton": { "label": "Our Mission", "link": "/about" }
   },

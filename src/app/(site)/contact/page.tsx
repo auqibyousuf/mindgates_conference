@@ -2,24 +2,22 @@ import React from 'react'
 import { Mail, Phone, MapPin, Send, Clock, Globe } from 'lucide-react'
 import { GlassContainer } from '@/components/GlassContainer'
 
+import { SubPageHero } from '@/components/SubPageHero';
+import siteConfig from '@/data/siteConfig.json';
+
 export default function ContactPage() {
   return (
-    <main className='min-h-screen pt-32 pb-24 bg-background overflow-hidden'>
-      <div className='max-w-7xl mx-auto px-6'>
-        {/* Header */}
-        <div className='max-w-3xl mb-24 space-y-8'>
-          <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]'>
-            Connect With Us
-          </div>
-          <h1 className='text-6xl md:text-8xl font-serif font-bold text-foreground leading-[0.9]'>
-            Let&apos;s Start a{' '}
-            <span className='text-primary italic'>Dialogue</span>
-          </h1>
-          <p className='text-xl text-foreground/60 leading-relaxed font-medium'>
-            Have questions about an upcoming conference or publication? Our team
-            is here to guide you through every step of your scholarly journey.
-          </p>
-        </div>
+    <main className='min-h-screen bg-background overflow-hidden'>
+      <SubPageHero 
+        titleLine1="Let's Start a"
+        titleItalic="Dialogue"
+        description="Have questions about an upcoming conference or publication? Our team is here to guide you through every step of your scholarly journey."
+        badge="Connect With Us"
+        icon={Mail}
+        image={siteConfig.hero.image}
+      />
+
+      <div className='max-w-7xl mx-auto px-6 py-24'>
 
         <div className='grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-20 items-start'>
           {/* Contact Form */}
@@ -152,15 +150,18 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Map Placeholder */}
+            {/* Map Integration */}
             <div className='aspect-video rounded-[2.5rem] bg-foreground/5 border-4 border-white shadow-2xl relative overflow-hidden group'>
-              <div className='absolute inset-0 bg-primary/10 animate-pulse' />
-              <div className='absolute inset-0 flex flex-col items-center justify-center text-center p-8 space-y-4'>
-                <MapPin className='size-12 text-primary/40 group-hover:scale-110 transition-transform duration-500' />
-                <p className='text-sm font-bold text-foreground/40 uppercase tracking-widest'>
-                  Interactive Map Integration <br /> Coming Soon
-                </p>
-              </div>
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3306.467472018861!2d74.80164837643534!3d34.03195207316531!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38e18f97063f114b%3A0xe54e60742f5674c9!2sBarzulla%2C%20Srinagar!5e0!3m2!1sen!2sin!4v1715850000000!5m2!1sen!2sin" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen={true} 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+                className="grayscale-[0.5] contrast-[1.1] hover:grayscale-0 transition-all duration-700"
+              />
             </div>
           </div>
         </div>

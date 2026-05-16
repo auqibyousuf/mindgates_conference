@@ -1,22 +1,38 @@
 [
   {
-    "id": "icr-2025",
-    "title": "International Conference on Research",
-    "date": "11 – 13 Nov, 2025",
-    "venue": "SSM College",
+    "id": "icr-2026",
+    "title": "Global Innovation in Research 2026",
+    "date": "15 – 17 Oct, 2026",
+    "startDate": "2026-10-15",
+    "endDate": "2026-10-17",
+    "venue": "International Convention Centre",
     "status": "Upcoming",
     "type": "International",
-    "brochureUrl": "#",
-    "proceedingsUrl": "#"
+    "brochureUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    "proceedingsUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
   },
   {
-    "id": "ncr-2024",
-    "title": "National Conference on Research",
-    "date": "05 – 07 Oct, 2024",
-    "venue": "University of Delhi",
-    "status": "Past",
+    "id": "ncr-2026",
+    "title": "National Research Symposium",
+    "date": "10 – 12 Jun, 2026",
+    "startDate": "2026-06-10",
+    "endDate": "2026-06-12",
+    "venue": "State University Hall",
+    "status": "Upcoming",
     "type": "National",
-    "brochureUrl": "#",
-    "proceedingsUrl": "#"
+    "brochureUrl": "https://www.clickdimensions.com/links/TestPDFfile.pdf",
+    "proceedingsUrl": "https://www.clickdimensions.com/links/TestPDFfile.pdf"
+  },
+  {
+    "id": "past-conf-2025",
+    "title": "Academic Excellence Forum 2025",
+    "date": "20 – 22 Nov, 2025",
+    "startDate": "2025-11-20",
+    "endDate": "2025-11-22",
+    "venue": "Grand Academic Plaza",
+    "status": "Past",
+    "type": "International",
+    "brochureUrl": "https://arxiv.org/pdf/2101.00001.pdf",
+    "proceedingsUrl": "https://arxiv.org/pdf/2101.00001.pdf"
   }
 ]

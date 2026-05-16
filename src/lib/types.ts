@@ -30,9 +30,11 @@ export interface Conference {
   id: string;
   title: string;
   type: string;
-  date: string;
+  date: string;       // Formatted date string for display (e.g., "11 – 13 Nov, 2025")
+  startDate: string;  // ISO date (YYYY-MM-DD)
+  endDate: string;    // ISO date (YYYY-MM-DD)
   venue: string;
-  status: 'Upcoming' | 'Past';
+  status: 'Upcoming' | 'Past' | 'Ongoing';
   brochureUrl?: string;
   proceedingsUrl?: string;
 }

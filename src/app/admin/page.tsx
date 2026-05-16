@@ -355,7 +355,7 @@ function SearchableLinkPicker({ value, onChange, onCustom }: { value: string, on
   );
 }
 
-function FieldEditor({ label, value, onChange, isNested = false }: { label: string, value: unknown, onChange: (val: unknown) => void, isNested?: boolean }) {
+function FieldEditor({ label, value, onChange, activeTab, isNested = false }: { label: string, value: unknown, onChange: (val: unknown) => void, activeTab?: string, isNested?: boolean }) {
   const isFilePath = !label.toLowerCase().includes('text') && (
                    label.toLowerCase().includes('image') ||
                    label.toLowerCase().includes('brochure') ||
@@ -419,6 +419,7 @@ function FieldEditor({ label, value, onChange, isNested = false }: { label: stri
               label={subKey}
               value={subValue}
               isNested={true}
+              activeTab={activeTab}
               onChange={(newVal) => onChange({ ...(value as Record<string, unknown>), [subKey]: newVal })}
             />
           ))}
@@ -429,8 +430,9 @@ function FieldEditor({ label, value, onChange, isNested = false }: { label: stri
 
   const isLongText = stringValue.length > 100 || label.toLowerCase().includes('message') || label.toLowerCase().includes('description') || label.toLowerCase().includes('bio');
   const isCategoryField = label.toLowerCase() === 'category' || label.toLowerCase() === 'type' || label.toLowerCase() === 'icon';
+  const isDateField = label.toLowerCase().includes('startdate') || label.toLowerCase().includes('enddate') || (label.toLowerCase() === 'date' && !stringValue.includes('-'));
 
-  const EDITOR_CATEGORIES = ["Chief", "Executive", "Associate", "Advisory", "Council", "Reviewer"];
+  const EDITOR_CATEGORIES = ["Governing Council"];
   const NOTIFICATION_CATEGORIES = ["News", "Update", "Deadline", "Alert"];
   const CONF_TYPES = ["International", "National"];
   const STAT_ICONS = ["Users", "Calendar", "BookOpen", "Award", "Globe"];
@@ -447,6 +449,13 @@ function FieldEditor({ label, value, onChange, isNested = false }: { label: stri
           onChange={(e) => onChange(e.target.value)}
           className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all min-h-24 leading-relaxed"
         />
+      ) : isDateField ? (
+        <input
+          type="date"
+          value={stringValue}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+        />
       ) : isCategoryField ? (
         <select
           value={stringValue}
@@ -454,7 +463,7 @@ function FieldEditor({ label, value, onChange, isNested = false }: { label: stri
           className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer appearance-none"
         >
           <option value="">Select {label}...</option>
-          {(label.toLowerCase() === 'category' ? [...EDITOR_CATEGORIES, ...NOTIFICATION_CATEGORIES] : 
+          {(label.toLowerCase() === 'category' ? (activeTab === 'editors.json' ? EDITOR_CATEGORIES : NOTIFICATION_CATEGORIES) : 
             label.toLowerCase() === 'type' ? CONF_TYPES : 
             STAT_ICONS).filter((v, i, a) => a.indexOf(v) === i).map(cat => (
             <option key={cat} value={cat}>{cat}</option>
@@ -797,6 +806,7 @@ function ItemForm({ item, onSave, onCancel, loading, title, activeTab }: {
                   key={key}
                   label={key}
                   value={value}
+                  activeTab={activeTab}
                   onChange={(newVal) => setFormData((prev) => ({ ...prev, [key]: newVal }))}
                 />
               );

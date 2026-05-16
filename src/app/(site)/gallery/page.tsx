@@ -3,6 +3,9 @@ import Image from 'next/image';
 import { Camera, Maximize2 } from 'lucide-react';
 import { GlassContainer } from '@/components/GlassContainer';
 
+import { SubPageHero } from '@/components/SubPageHero';
+import siteConfig from '@/data/siteConfig.json';
+
 export default function GalleryPage() {
   const images = [
     { src: "/images/gallery/gallery-1.png", title: "Global Academic Forum 2024", category: "Conference" },
@@ -14,21 +17,17 @@ export default function GalleryPage() {
   ];
 
   return (
-    <main className="min-h-screen pt-32 pb-24 bg-background">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="max-w-3xl mb-16 space-y-6">
-           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]">
-              Visual Legacy
-            </div>
-            <h1 className="text-6xl md:text-8xl font-serif font-bold text-foreground leading-[0.9]">
-              Moments of <span className="text-primary italic">Impact</span>
-            </h1>
-            <p className="text-xl text-foreground/60 leading-relaxed font-medium">
-              Explore the highlights from our past conferences, workshops, and academic gatherings.
-            </p>
-        </div>
+    <main className="min-h-screen bg-background">
+      <SubPageHero 
+        titleLine1="Moments of"
+        titleItalic="Impact"
+        description="Explore the highlights from our past conferences, workshops, and academic gatherings."
+        badge="Visual Legacy"
+        icon={Camera}
+        image={siteConfig.hero.galleryImage}
+      />
 
+      <div className="max-w-7xl mx-auto px-6 py-20">
         {/* Gallery Grid */}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
            {images.map((img, i) => (
@@ -50,22 +49,6 @@ export default function GalleryPage() {
                 </div>
              </GlassContainer>
            ))}
-        </div>
-
-        {/* Call to Action */}
-        <div className="mt-24">
-           <GlassContainer variant="dark" className="p-12 md:p-20 text-center space-y-8 bg-foreground relative overflow-hidden">
-              <div className="absolute inset-0 bg-primary/5 opacity-30" />
-              <div className="relative z-10 space-y-6">
-                 <h2 className="text-4xl md:text-5xl font-serif font-bold text-white italic">&quot;Capturing the essence of scholarly pursuit.&quot;</h2>
-                 <p className="text-xl text-white/50 max-w-2xl mx-auto">
-                    Every image tells a story of collaboration, discovery, and the relentless search for knowledge.
-                 </p>
-                 <button className="glass-button py-4 px-10 text-[10px] uppercase tracking-widest font-black mx-auto">
-                    View More on Instagram <Camera className="size-4 ml-2" />
-                 </button>
-              </div>
-           </GlassContainer>
         </div>
       </div>
     </main>

@@ -54,7 +54,7 @@ export default async function Home() {
               </span>
             </div>
 
-            <h1 className='text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white leading-[1.05]'>
+            <h1 className='text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-white leading-[1.05]'>
               {siteConfig.hero.titleLine1}{' '}
               <span className='text-primary italic relative'>
                 {siteConfig.hero.titleItalic}
@@ -75,7 +75,7 @@ export default async function Home() {
               {siteConfig.hero.titleLine2}
             </h1>
 
-            <p className='text-xl text-white/80 leading-relaxed max-w-2xl font-medium'>
+            <p className='text-lg text-white/80 leading-relaxed max-w-2xl font-medium'>
               <span className='text-primary font-black block mb-2'>
                 {siteConfig.tagline}
               </span>

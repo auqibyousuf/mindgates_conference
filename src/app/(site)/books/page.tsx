@@ -2,6 +2,9 @@ import { DataTable, Column } from '@/components/DataTable';
 import Image from 'next/image';
 import { readData } from '@/lib/data-handler';
 import { Book } from '@/lib/types';
+import { SubPageHero } from '@/components/SubPageHero';
+import siteConfig from '@/data/siteConfig.json';
+import { BookOpen } from 'lucide-react';
 
 export default async function BooksPage() {
   const books = (await readData('books.json') as Book[]) || [];
@@ -52,59 +55,24 @@ export default async function BooksPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-background pt-32 pb-20">
-      {/* Header Section */}
-      <section className="relative px-6 mb-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto text-center space-y-8 relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]">
-            Academic Gallery
-          </div>
-          <h1 className="text-5xl md:text-7xl font-serif font-bold text-foreground leading-tight">
-            Published <span className="text-primary italic">Books</span>
-          </h1>
-          <p className="max-w-2xl mx-auto text-xl text-foreground/60 leading-relaxed font-medium">
-            Explore our curated collection of scholarly publications, research series, and academic monographs from leading researchers worldwide.
-          </p>
-        </div>
-
-        {/* Background Elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full z-0">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-[120px]" />
-        </div>
-      </section>
+    <main className="min-h-screen bg-background">
+      <SubPageHero 
+        titleLine1="Published"
+        titleItalic="Books"
+        description="Explore our curated collection of scholarly publications, research series, and academic monographs from leading researchers worldwide."
+        badge="Academic Gallery"
+        icon={BookOpen}
+        image={siteConfig.hero.booksImage}
+      />
 
       {/* Table Section */}
-      <section className="px-6 relative z-10">
+      <section className="px-6 relative z-10 py-20">
         <div className="max-w-7xl mx-auto">
           <DataTable 
             columns={columns} 
             data={books} 
             emptyMessage="No publications found in our gallery." 
           />
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="mt-32 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="glass-card bg-foreground p-12 md:p-20 relative overflow-hidden border-none text-white">
-            <div className="absolute inset-0 bg-primary/5 opacity-50" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative z-10">
-              <div className="space-y-4">
-                <div className="text-5xl font-serif font-bold text-primary">100+</div>
-                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Total Publications</div>
-              </div>
-              <div className="space-y-4">
-                <div className="text-5xl font-serif font-bold text-primary">45k+</div>
-                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Citations Generated</div>
-              </div>
-              <div className="space-y-4">
-                <div className="text-5xl font-serif font-bold text-primary">12</div>
-                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Series Categories</div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
     </main>

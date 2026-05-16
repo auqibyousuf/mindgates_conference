@@ -120,14 +120,30 @@ export default async function ConferenceDetailPage({ params }: { params: Promise
                     Register Now
                     <ChevronRight className="size-5" />
                   </button>
-                  <button className="w-full py-4 rounded-xl border border-white/20 bg-white/5 text-sm font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2">
-                    <Download className="size-4" />
-                    Download Brochure
-                  </button>
+                  {conference.brochureUrl && conference.brochureUrl !== "#" && (
+                    <a 
+                      href={conference.brochureUrl}
+                      target="_blank"
+                      className="w-full py-4 rounded-xl border border-white/20 bg-white/5 text-sm font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Download className="size-4" />
+                      Download Brochure
+                    </a>
+                  )}
+                  {conference.proceedingsUrl && conference.proceedingsUrl !== "#" && conference.status === "Past" && (
+                    <a 
+                      href={conference.proceedingsUrl}
+                      target="_blank"
+                      className="w-full py-4 rounded-xl border border-primary/20 bg-primary/20 text-primary text-sm font-bold hover:bg-primary/30 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Download className="size-4" />
+                      View Proceedings
+                    </a>
+                  )}
                </div>
                <div className="pt-6 border-t border-white/10 flex items-center justify-between text-white/40 text-[10px] font-black uppercase tracking-widest">
-                  <span>Early Bird Open</span>
-                  <span>Ends Dec 2024</span>
+                  <span>Registration Status</span>
+                  <span>{conference.status === "Upcoming" ? "Open Now" : "Closed"}</span>
                </div>
             </div>
 
