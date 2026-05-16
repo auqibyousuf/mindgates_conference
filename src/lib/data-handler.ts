@@ -1,67 +1,96 @@
-import fs from 'fs';
-import path from 'path';
+import siteConfigDefault from '@/data/siteConfig.json';
+import conferencesDefault from '@/data/conferences.json';
+import booksDefault from '@/data/books.json';
+import awardsDefault from '@/data/awards.json';
+import editorsDefault from '@/data/editors.json';
 
 /**
  * Robust data handler that works both locally (Filesystem) 
  * and on Cloudflare (KV Storage).
  */
-export async function readData(filename: string) {
-  // 1. Try Cloudflare KV first
+
+// Use dynamic detection for Cloudflare context
+let getKV: (() => { env: Record<string, any> }) | null = null; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+async function initCloudflare() {
+  if (getKV) return;
   try {
-    // @ts-ignore: Dynamic import to avoid build issues in non-cf envs
-    const { getRequestContext } = await import('@opennextjs/cloudflare');
-    const { env } = getRequestContext();
-    const kv = env.MINDGATES_DATA;
-    
-    if (kv) {
-      const data = await kv.get(filename);
-      if (data) return JSON.parse(data);
-    }
+    // @ts-expect-error - This module only exists in Cloudflare runtime
+    const cf = await import('@opennextjs/cloudflare');
+    getKV = cf.getCloudflareContext;
   } catch {
-    // Fallback to filesystem if not in CF or KV not bound
+    // Not in Cloudflare environment
   }
-
-  // 2. Fallback to Local Filesystem
-  try {
-    const filePath = path.join(process.cwd(), 'src', 'data', filename);
-    if (fs.existsSync(filePath)) {
-      const data = fs.readFileSync(filePath, 'utf8');
-      return JSON.parse(data);
-    }
-  } catch (err) {
-    console.error(`Read error for ${filename}:`, err);
-  }
-
-  return null;
 }
 
-export async function writeData(filename: string, data: any) {
-  // 1. Try Cloudflare KV first
-  try {
-    // @ts-ignore
-    const { getRequestContext } = await import('@opennextjs/cloudflare');
-    const { env } = getRequestContext();
-    const kv = env.MINDGATES_DATA;
-    
-    if (kv) {
-      await kv.put(filename, JSON.stringify(data));
-      return { success: true, storage: 'kv' };
-    }
-  } catch {
-    // Fallback to filesystem
-  }
+const DEFAULT_DATA: Record<string, unknown> = {
+  'siteConfig.json': siteConfigDefault,
+  'conferences.json': conferencesDefault,
+  'books.json': booksDefault,
+  'awards.json': awardsDefault,
+  'editors.json': editorsDefault,
+};
 
-  // 2. Fallback to Local Filesystem
+export async function readData(filename: string): Promise<unknown> {
   try {
-    const filePath = path.join(process.cwd(), 'src', 'data', filename);
+    await initCloudflare();
+    
+    // 1. Try Cloudflare KV first (Production)
+    if (getKV) {
+      const ctx = getKV();
+      const kv = ctx?.env?.MINDGATES_DATA;
+      if (kv) {
+        const data = await kv.get(filename);
+        if (data) return JSON.parse(data);
+      }
+    }
+
+    // 2. Fallback to Local Filesystem (Development)
+    if (process.env.NODE_ENV === 'development') {
+      try {
+        const fs = await import('fs');
+        const path = await import('path');
+        const filePath = path.join(process.cwd(), 'src/data', filename);
+        if (fs.existsSync(filePath)) {
+          return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        }
+      } catch {
+        // Fallback to static data if fs fails
+      }
+    }
+
+    // 3. Final Fallback: Hardcoded defaults (Production first-load)
+    return DEFAULT_DATA[filename] || null;
+
+  } catch (error) {
+    console.error(`Error reading data (${filename}):`, error);
+    return DEFAULT_DATA[filename] || null;
+  }
+}
+
+export async function writeData(filename: string, data: unknown) {
+  try {
+    await initCloudflare();
+
+    // 1. Try Cloudflare KV first (Production)
+    if (getKV) {
+      const ctx = getKV();
+      const kv = ctx?.env?.MINDGATES_DATA;
+      if (kv) {
+        await kv.put(filename, JSON.stringify(data));
+        return { success: true, storage: 'kv' };
+      }
+    }
+
+    // 2. Fallback to Local Filesystem (Development)
+    const fs = await import('fs');
+    const path = await import('path');
+    const filePath = path.join(process.cwd(), 'src/data', filename);
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
     return { success: true, storage: 'fs' };
-  } catch (err) {
-    console.error(`Write error for ${filename}:`, err);
-    return { 
-      success: false, 
-      error: err instanceof Error ? err.message : String(err),
-      cwd: process.cwd()
-    };
+
+  } catch (error) {
+    console.error(`Error writing data (${filename}):`, error);
+    return { success: false, error: String(error) };
   }
 }
