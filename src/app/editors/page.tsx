@@ -1,11 +1,23 @@
 import React from 'react';
 import Image from 'next/image';
 import { Mail, Linkedin, GraduationCap, UserCheck, Phone } from 'lucide-react';
-import editors from '@/data/editors.json';
 import { GlassContainer } from '@/components/GlassContainer';
+import { readData } from '@/lib/data-handler';
 
+interface Editor {
+  id: string;
+  name: string;
+  role: string;
+  institution: string;
+  image: string;
+  category: string;
+  email: string;
+  contact: string;
+}
 
-export default function EditorsPage() {
+export default async function EditorsPage() {
+  const editors = (await readData('editors.json') as Editor[]) || [];
+  
   const categories = ["Chief", "Associate", "Advisory", "Council"];
 
   return (
@@ -86,7 +98,7 @@ export default function EditorsPage() {
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {editors.filter(e => e.category === category).map((member) => (
                     <GlassContainer key={member.id} variant="light" hover className="p-8 group flex flex-col h-full">
-                       <div className="space-y-6 flex-grow">
+                       <div className="space-y-6 grow">
                           <div className="flex items-start justify-between">
                              <div className="aspect-square w-24 rounded-2xl overflow-hidden border-4 border-white shadow-lg relative grayscale group-hover:grayscale-0 transition-all">
                                 <Image 

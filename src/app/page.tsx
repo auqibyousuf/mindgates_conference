@@ -1,13 +1,38 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Bell, Calendar, Users, ArrowRight, BookOpen } from "lucide-react";
-import siteConfig from "@/data/siteConfig.json";
-import conferences from "@/data/conferences.json";
-import awards from "@/data/awards.json";
 import { ConferenceCard } from "@/components/ConferenceCard";
 import { AwardCard } from "@/components/AwardCard";
+import { readData } from "@/lib/data-handler";
 
-export default function Home() {
+interface Conference {
+  id: string;
+  title: string;
+  status: string;
+  date: string;
+  venue: string;
+  type: string;
+  brochureUrl?: string;
+  proceedingsUrl?: string;
+}
+
+interface Award {
+  id: string;
+  authorName: string;
+  title: string;
+  eventName: string;
+  eventDate: string;
+  awardName: string;
+  eventVenue?: string;
+}
+
+export default async function Home() {
+  const siteConfig = await readData('siteConfig.json');
+  const conferences = (await readData('conferences.json') as Conference[]) || [];
+  const awards = (await readData('awards.json') as Award[]) || [];
+
+  if (!siteConfig) return null;
+
   const upcomingConferences = conferences.filter(c => c.status === "Upcoming");
 
   return (

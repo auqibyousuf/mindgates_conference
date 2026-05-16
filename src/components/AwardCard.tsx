@@ -9,7 +9,7 @@ interface AwardProps {
     title: string;
     eventName: string;
     eventDate: string;
-    eventVenue: string;
+    eventVenue?: string;
     awardName: string;
   };
 }
@@ -43,10 +43,12 @@ export const AwardCard: React.FC<AwardProps> = ({ award }) => {
             <Calendar className="size-3" />
             <span>{award.eventName} • {award.eventDate}</span>
           </div>
-          <div className="flex items-center gap-3 text-xs text-foreground/40 font-medium uppercase tracking-widest">
-            <MapPin className="size-3" />
-            <span>{award.eventVenue}</span>
-          </div>
+          {award.eventVenue && (
+            <div className="flex items-center gap-3 text-xs text-foreground/40 font-medium uppercase tracking-widest">
+              <MapPin className="size-3" />
+              <span>{award.eventVenue}</span>
+            </div>
+          )}
         </div>
       </div>
     </GlassContainer>

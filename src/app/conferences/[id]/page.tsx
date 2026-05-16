@@ -1,6 +1,3 @@
-"use client";
-
-import { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
@@ -8,7 +5,7 @@ import {
   ChevronLeft, ChevronRight, Share2, Printer,
   FileCheck, HelpCircle
 } from "lucide-react";
-import conferences from "@/data/conferences.json";
+import { readData } from "@/lib/data-handler";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -16,9 +13,19 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export default function ConferenceDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const conference = conferences.find(c => c.id === id);
+interface Conference {
+  id: string;
+  title: string;
+  type: string;
+  status: string;
+  date: string;
+  venue: string;
+}
+
+export default async function ConferenceDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const conferences = (await readData('conferences.json') as Conference[]) || [];
+  const conference = conferences.find((c) => c.id === id);
 
   if (!conference) {
     return (
@@ -159,14 +166,14 @@ export default function ConferenceDetailPage({ params }: { params: Promise<{ id:
             {/* Timeline */}
             <div className="glass-card p-8 space-y-6">
               <h3 className="text-lg font-serif font-bold">Timeline</h3>
-              <div className="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-px before:bg-foreground/5">
+              <div className="space-y-8 relative before:absolute before:left-2.75 before:top-2 before:bottom-2 before:w-px before:bg-foreground/5">
                 {[
                   { date: "Oct 20, 2024", label: "Abstract Submission" },
                   { date: "Oct 30, 2024", label: "Acceptance Notification" },
                   { date: "Nov 05, 2024", label: "Final Paper Deadline" },
                 ].map((step, i) => (
                   <div key={i} className="relative pl-8 flex flex-col gap-1">
-                    <div className="absolute left-0 top-1.5 w-[22px] h-[22px] rounded-full bg-background border-2 border-primary z-10 flex items-center justify-center">
+                    <div className="absolute left-0 top-1.5 w-5.5 h-5.5 rounded-full bg-background border-2 border-primary z-10 flex items-center justify-center">
                        <div className="w-2 h-2 rounded-full bg-primary" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-widest text-primary">{step.date}</span>

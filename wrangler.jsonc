@@ -21,5 +21,11 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "MINDGATES_DATA",
+      "id": "placeholder-id"
+    }
+  ]
 }

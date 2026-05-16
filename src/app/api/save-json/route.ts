@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { readData, writeData } from '@/lib/data-handler';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,15 +13,16 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Invalid filename' }, { status: 400 });
     }
 
-    const filePath = path.join(process.cwd(), 'src', 'data', filename);
-    const data = fs.readFileSync(filePath, 'utf8');
+    const data = await readData(filename);
+    if (!data) {
+      return NextResponse.json({ error: 'Data not found' }, { status: 404 });
+    }
 
-    return NextResponse.json(JSON.parse(data));
+    return NextResponse.json(data);
   } catch (err) {
-    const cwd = process.cwd();
-    const detail = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ 
-      error: `Failed to read data: ${detail} (CWD: ${cwd})`
+      error: 'Failed to read data', 
+      details: err instanceof Error ? err.message : String(err)
     }, { status: 500 });
   }
 }
@@ -31,18 +31,19 @@ export async function POST(request: Request) {
   try {
     const { filename, data } = await request.json();
     
-    // Safety check: only allow specific JSON files
     const allowedFiles = ['siteConfig.json', 'conferences.json', 'books.json', 'awards.json', 'editors.json'];
     if (!allowedFiles.includes(filename)) {
       return NextResponse.json({ error: 'Invalid filename' }, { status: 400 });
     }
 
-    const filePath = path.join(process.cwd(), 'src', 'data', filename);
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-
-    return NextResponse.json({ success: true });
+    const result = await writeData(filename, data);
+    
+    if (result.success) {
+      return NextResponse.json({ success: true, storage: result.storage });
+    } else {
+      return NextResponse.json({ error: result.error, cwd: result.cwd }, { status: 500 });
+    }
   } catch (err) {
-    console.error('Save error:', err);
     return NextResponse.json({ 
       error: 'Failed to save data', 
       details: err instanceof Error ? err.message : String(err) 

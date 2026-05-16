@@ -9,7 +9,7 @@ interface ConferenceProps {
     date: string;
     venue: string;
     type: string;
-    brochureUrl: string;
+    brochureUrl?: string;
     status: string;
   };
 }
@@ -50,13 +50,15 @@ export const ConferenceCard: React.FC<ConferenceProps> = ({ conf }) => {
           Details 
           <ChevronRight className="size-3 group-hover/link:translate-x-0.5 transition-transform" />
         </Link>
-        <Link 
-          href={conf.brochureUrl} 
-          target="_blank"
-          className="text-[10px] font-black uppercase tracking-widest bg-primary text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95"
-        >
-          Brochure
-        </Link>
+        {conf.brochureUrl && (
+          <Link 
+            href={conf.brochureUrl} 
+            target="_blank"
+            className="text-[10px] font-black uppercase tracking-widest bg-primary text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95"
+          >
+            Brochure
+          </Link>
+        )}
       </div>
     </div>
   );

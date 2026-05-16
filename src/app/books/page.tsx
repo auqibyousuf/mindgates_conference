@@ -1,11 +1,12 @@
-import React from 'react';
-import books from '@/data/books.json';
 import { DataTable, Column } from '@/components/DataTable';
 import Image from 'next/image';
+import { readData } from '@/lib/data-handler';
 
-type Book = typeof books[0];
+export default async function BooksPage() {
+  const books = await readData('books.json') || [];
+  
+  type Book = typeof books[0];
 
-export default function BooksPage() {
   const columns: Column<Book>[] = [
     {
       header: 'Book Front Page',
