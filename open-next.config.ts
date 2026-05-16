@@ -1,5 +1,5 @@
 // default open-next.config.ts file created by @opennextjs/cloudflare
-// @ts-expect-error
+// @ts-expect-error: External Cloudflare module typing issue
 import { defineCloudflareConfig } from "@opennextjs/cloudflare";
 // import r2IncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/r2-incremental-cache";
 
