@@ -3,17 +3,7 @@
 import React, { useState } from 'react';
 import { Calendar, Search, Globe, MapPin, FileText, Download } from 'lucide-react';
 import { DataTable, Column } from '@/components/DataTable';
-
-type Conference = {
-  id: string;
-  title: string;
-  type: string;
-  date: string;
-  venue: string;
-  status: 'Upcoming' | 'Past';
-  brochureUrl?: string;
-  proceedingsUrl?: string;
-};
+import { Conference } from '@/lib/types';
 
 type ConferenceStatus = 'All' | 'Upcoming' | 'Past';
 

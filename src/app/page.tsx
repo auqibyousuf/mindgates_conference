@@ -4,30 +4,10 @@ import { ChevronRight, Bell, Calendar, Users, ArrowRight, BookOpen } from "lucid
 import { ConferenceCard } from "@/components/ConferenceCard";
 import { AwardCard } from "@/components/AwardCard";
 import { readData } from "@/lib/data-handler";
-
-interface Conference {
-  id: string;
-  title: string;
-  status: string;
-  date: string;
-  venue: string;
-  type: string;
-  brochureUrl?: string;
-  proceedingsUrl?: string;
-}
-
-interface Award {
-  id: string;
-  authorName: string;
-  title: string;
-  eventName: string;
-  eventDate: string;
-  awardName: string;
-  eventVenue?: string;
-}
+import { SiteConfig, Conference, Award } from "@/lib/types";
 
 export default async function Home() {
-  const siteConfig = await readData('siteConfig.json');
+  const siteConfig = await readData('siteConfig.json') as SiteConfig;
   const conferences = (await readData('conferences.json') as Conference[]) || [];
   const awards = (await readData('awards.json') as Award[]) || [];
 

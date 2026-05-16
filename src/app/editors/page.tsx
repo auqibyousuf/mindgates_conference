@@ -3,17 +3,7 @@ import Image from 'next/image';
 import { Mail, Linkedin, GraduationCap, UserCheck, Phone } from 'lucide-react';
 import { GlassContainer } from '@/components/GlassContainer';
 import { readData } from '@/lib/data-handler';
-
-interface Editor {
-  id: string;
-  name: string;
-  role: string;
-  institution: string;
-  image: string;
-  category: string;
-  email: string;
-  contact: string;
-}
+import { Editor } from '@/lib/types';
 
 export default async function EditorsPage() {
   const editors = (await readData('editors.json') as Editor[]) || [];

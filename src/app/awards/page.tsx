@@ -2,23 +2,12 @@ import { Trophy, Star, Calendar, MapPin, Medal } from "lucide-react";
 import { DataTable, Column } from "@/components/DataTable";
 import { GlassContainer } from "@/components/GlassContainer";
 import { readData } from "@/lib/data-handler";
-
-interface Award {
-  id: string;
-  authorName: string;
-  title: string;
-  eventName: string;
-  eventDate: string;
-  eventVenue?: string;
-  awardName: string;
-}
+import { Award } from "@/lib/types";
 
 export default async function AwardsPage() {
   const awards = (await readData('awards.json') as Award[]) || [];
   
-  type AwardEntry = Award;
-
-  const columns: Column<AwardEntry>[] = [
+  const columns: Column<Award>[] = [
     {
       header: 'Recipient',
       accessor: (award) => (

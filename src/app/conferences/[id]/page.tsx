@@ -6,20 +6,12 @@ import {
   FileCheck, HelpCircle
 } from "lucide-react";
 import { readData } from "@/lib/data-handler";
+import { Conference } from "@/lib/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-interface Conference {
-  id: string;
-  title: string;
-  type: string;
-  status: string;
-  date: string;
-  venue: string;
 }
 
 export default async function ConferenceDetailPage({ params }: { params: Promise<{ id: string }> }) {

@@ -1,11 +1,10 @@
 import { DataTable, Column } from '@/components/DataTable';
 import Image from 'next/image';
 import { readData } from '@/lib/data-handler';
+import { Book } from '@/lib/types';
 
 export default async function BooksPage() {
-  const books = await readData('books.json') || [];
-  
-  type Book = typeof books[0];
+  const books = (await readData('books.json') as Book[]) || [];
 
   const columns: Column<Book>[] = [
     {
