@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     if (result.success) {
       return NextResponse.json({ success: true, storage: result.storage });
     } else {
-      return NextResponse.json({ error: result.error, cwd: result.cwd }, { status: 500 });
+      return NextResponse.json({ error: result.error }, { status: 500 });
     }
   } catch (err) {
     return NextResponse.json({ 
