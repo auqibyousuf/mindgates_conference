@@ -1,41 +1,44 @@
-import React from 'react';
-import { GlassContainer } from './GlassContainer';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import React from "react"
+import { GlassContainer } from "./GlassContainer"
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
 
 export interface Column<T> {
-  header: string;
-  accessor: keyof T | ((item: T) => React.ReactNode);
-  className?: string;
+  header: string
+  accessor: keyof T | ((item: T) => React.ReactNode)
+  className?: string
 }
 
 interface DataTableProps<T> {
-  columns: Column<T>[];
-  data: T[];
-  emptyMessage?: string;
+  columns: Column<T>[]
+  data: T[]
+  emptyMessage?: string
 }
 
-export function DataTable<T extends { id: string | number }>({ 
-  columns, 
-  data, 
-  emptyMessage = "No data found" 
+export function DataTable<T extends { id: string | number }>({
+  columns,
+  data,
+  emptyMessage = "No data found",
 }: DataTableProps<T>) {
   return (
-    <GlassContainer variant="light" className="overflow-hidden border-none shadow-2xl p-0 bg-white/60">
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+    <GlassContainer
+      variant='light'
+      className='overflow-hidden border-none shadow-2xl p-0 bg-white/60'
+    >
+      <div className='overflow-x-auto'>
+        <table className='w-full text-left border-collapse'>
           <thead>
-            <tr className="bg-primary/5 border-b border-primary/10">
+            <tr className='bg-primary/5 border-b border-primary/10'>
               {columns.map((col, i) => (
-                <th 
-                  key={i} 
+                <th
+                  key={i}
                   className={cn(
-                    "px-8 py-6 text-[10px] font-black uppercase tracking-[0.3em] text-primary/70",
-                    col.className
+                    "px-3 py-3.5 sm:px-4 sm:py-4 md:px-6 md:py-5 text-[8px] md:text-[9px] lg:text-[10px] font-black uppercase tracking-[0.3em] text-primary/70",
+                    col.className,
                   )}
                 >
                   {col.header}
@@ -43,36 +46,36 @@ export function DataTable<T extends { id: string | number }>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-foreground/5">
+          <tbody className='divide-y divide-foreground/5'>
             {data.length > 0 ? (
               data.map((item) => (
-                <tr 
-                  key={item.id} 
-                  className="group hover:bg-primary/2 transition-colors duration-300"
+                <tr
+                  key={item.id}
+                  className='group hover:bg-primary/2 transition-colors duration-300'
                 >
                   {columns.map((col, i) => (
-                    <td 
-                      key={i} 
+                    <td
+                      key={i}
                       className={cn(
-                        "px-8 py-6 text-[13px] font-semibold text-foreground/70 group-hover:text-primary transition-colors",
-                        col.className
+                        "px-2 py-3 sm:px-4 sm:py-4 md:px-6 md:py-5 text-[10px] md:text-xs lg:text-sm font-semibold text-foreground/70 group-hover:text-primary transition-colors",
+                        col.className,
                       )}
                     >
-                      {typeof col.accessor === 'function' 
-                        ? col.accessor(item) 
-                        : String(item[col.accessor] || '')}
+                      {typeof col.accessor === "function"
+                        ? col.accessor(item)
+                        : String(item[col.accessor] || "")}
                     </td>
                   ))}
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={columns.length} className="px-8 py-32 text-center">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="size-16 rounded-full bg-primary/5 flex items-center justify-center">
-                       <div className="size-2 bg-primary/20 rounded-full animate-ping" />
+                <td colSpan={columns.length} className='px-8 py-32 text-center'>
+                  <div className='flex flex-col items-center gap-4'>
+                    <div className='size-16 rounded-full bg-primary/5 flex items-center justify-center'>
+                      <div className='size-2 bg-primary/20 rounded-full animate-ping' />
                     </div>
-                    <span className="text-foreground/30 font-bold uppercase tracking-widest text-[10px]">
+                    <span className='text-foreground/30 font-bold uppercase tracking-widest text-[10px]'>
                       {emptyMessage}
                     </span>
                   </div>
@@ -83,5 +86,5 @@ export function DataTable<T extends { id: string | number }>({
         </table>
       </div>
     </GlassContainer>
-  );
+  )
 }

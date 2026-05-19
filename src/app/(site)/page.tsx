@@ -32,7 +32,7 @@ export default async function Home() {
   return (
     <div className='flex flex-col w-full'>
       {/* Hero Section */}
-      <section className='relative h-[90vh] min-h-187.5 flex items-center pt-20 overflow-hidden'>
+      <section className='relative h-[80vh] sm:h-[85vh] lg:h-[90vh] min-h-[500px] sm:min-h-[600px] md:min-h-[700px] flex items-center pt-36 sm:pt-24 md:pt-28 overflow-hidden'>
         <div className='absolute inset-0 z-0'>
           <Image
             src={siteConfig.hero.image}
@@ -75,27 +75,26 @@ export default async function Home() {
               {siteConfig.hero.titleLine2}
             </h1>
 
-            <p className='text-lg text-white/80 leading-relaxed max-w-2xl font-medium'>
-              <span className='text-primary font-black block mb-2'>
+            <p className='text-sm sm:text-base md:text-lg text-white/80 leading-relaxed max-w-2xl font-medium'>
+              <span className='text-primary font-black block mb-2 text-sm sm:text-base'>
                 {siteConfig.tagline}
               </span>
               {siteConfig.hero.description}
             </p>
 
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 max-w-lg'>
+            <div className='flex flex-col sm:flex-row gap-4 pt-6'>
               <Button
                 href={siteConfig.hero.primaryButton.link}
                 variant='primary'
-                size='lg'
-                className='group'
+                className='group px-6 py-3 text-sm'
               >
                 {siteConfig.hero.primaryButton.label}
-                <ArrowRight className='size-5 ml-2 group-hover:translate-x-1 transition-transform' />
+                <ArrowRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
               </Button>
               <Button
                 href={siteConfig.hero.secondaryButton.link}
                 variant='secondary'
-                size='lg'
+                className='px-6 py-3 text-sm'
               >
                 {siteConfig.hero.secondaryButton.label}
               </Button>
@@ -149,12 +148,12 @@ export default async function Home() {
       </section>
 
       {/* Director Message */}
-      <section className='py-32 bg-white relative overflow-hidden'>
+      <section className='py-4 sm:py-8 md:py-12 lg:py-16 bg-white relative overflow-hidden'>
         <div className='absolute top-0 right-0 w-1/2 h-full bg-primary/5 -skew-x-12 translate-x-1/3' />
 
-        <FadeIn className='max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center'>
-          <div className='relative'>
-            <div className='aspect-4/5 rounded-4xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] relative z-10 border-8 border-white'>
+        <FadeIn className='section-container grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center'>
+          <div className='relative max-w-md mx-auto lg:max-w-none w-full'>
+            <div className='aspect-4/5 rounded-3xl sm:rounded-4xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] relative z-10 border-4 sm:border-8 border-white'>
               <Image
                 src='/images/banners/hero-v2.png' // Using hero as placeholder until director photo is provided
                 alt='Director'
@@ -162,34 +161,34 @@ export default async function Home() {
                 className='object-cover brightness-90 grayscale-[0.2] hover:grayscale-0 transition-all duration-700'
               />
             </div>
-            <div className='absolute -bottom-10 -right-10 w-72 glass-card p-8 z-20 border-primary/20 shadow-2xl'>
-              <p className='text-sm italic text-foreground/70 mb-4 leading-relaxed'>
+            <div className='absolute -bottom-4 -right-2 sm:-bottom-6 sm:-right-6 w-56 sm:w-72 max-w-[85vw] glass-card p-4 sm:p-6 z-20 border-primary/20 shadow-2xl'>
+              <p className='text-[10px] sm:text-xs italic text-foreground/70 mb-2 sm:mb-3 leading-relaxed'>
                 &quot;Research is the seed, and collaboration is the water that
                 makes it bloom.&quot;
               </p>
               <div>
-                <p className='font-bold text-xl text-primary font-serif'>
+                <p className='font-bold text-base sm:text-lg text-primary font-serif'>
                   Dr Naseer Ganiee
                 </p>
-                <p className='text-[10px] uppercase font-black text-foreground/40 tracking-[0.2em] mt-1'>
+                <p className='text-[8px] sm:text-[9px] uppercase font-black text-foreground/40 tracking-[0.2em] mt-0.5'>
                   Chief Editor & Director
                 </p>
               </div>
             </div>
             <div className='absolute -top-10 -left-10 w-40 h-40 border-2 border-primary/10 rounded-full z-0 animate-pulse' />
-            <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] border-2 border-primary/5 rounded-full z-0' />
+            <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] border-2 border-primary/5 rounded-full z-0 pointer-events-none' />
           </div>
 
-          <div className='grow space-y-10'>
-            <div className='space-y-6'>
-              <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]'>
+          <div className='grow space-y-4 sm:space-y-6 mt-4 lg:mt-0'>
+            <div className='space-y-3 sm:space-y-4'>
+              <div className='inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em]'>
                 Leadership
               </div>
-              <h2 className='text-4xl md:text-6xl font-serif font-bold text-foreground leading-tight'>
+              <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground leading-tight'>
                 Visionary <br />
                 <span className='text-primary italic'>Academic</span> Leadership
               </h2>
-              <p className='text-2xl font-serif italic text-foreground/70 leading-relaxed font-medium'>
+              <p className='text-sm sm:text-base md:text-lg lg:text-xl font-serif italic text-foreground/70 leading-relaxed font-medium'>
                 &quot;{siteConfig.directorMessage}&quot;
               </p>
             </div>
@@ -207,9 +206,9 @@ export default async function Home() {
       </section>
 
       {/* Stats Counter */}
-      <section className='py-24 px-6 bg-slate-50 text-foreground overflow-hidden relative border-t border-slate-200'>
+      <section className='py-4 sm:py-8 md:py-12 lg:py-16 bg-slate-50 text-foreground overflow-hidden relative border-t border-slate-200'>
         <div className='absolute inset-0 bg-primary/5' />
-        <FadeIn className='max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 relative z-10 text-center'>
+        <FadeIn className='section-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 relative z-10 text-center'>
           {statsData.globalStats.map(
             (stat: Record<string, string>, i: number) => (
               <StatCard
@@ -224,23 +223,22 @@ export default async function Home() {
       </section>
 
       {/* Upcoming Conferences */}
-      <section className='py-32 bg-background relative overflow-hidden'>
+      <section className='py-4 sm:py-8 md:py-12 lg:py-16 bg-background relative overflow-hidden'>
         <div className='absolute top-0 left-0 w-full h-24 bg-linear-to-b from-white to-transparent' />
 
-        <FadeIn className='max-w-7xl mx-auto px-6 relative z-10'>
-          <div className='flex flex-col md:flex-row justify-between items-end gap-8 mb-20'>
-            <div className='space-y-6'>
-              <div className='inline-block px-4 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.3em]'>
+        <FadeIn className='section-container relative z-10'>
+          <div className='flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-8 sm:mb-12'>
+            <div className='space-y-3 sm:space-y-4'>
+              <div className='inline-block px-3 py-1 sm:px-4 sm:py-1 rounded-full bg-primary/10 text-primary text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em]'>
                 Global Events
               </div>
-              <h2 className='text-5xl font-serif font-bold'>
+              <h2 className='text-2xl sm:text-3xl lg:text-4xl font-serif font-bold'>
                 Upcoming <span className='text-primary'>Conferences</span>
               </h2>
             </div>
             <Button
               href='/conferences'
               variant='outline'
-              size='lg'
               className='group'
             >
               View All Events
@@ -248,7 +246,7 @@ export default async function Home() {
             </Button>
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10'>
             {upcomingConferences.slice(0, 3).map((conf) => (
               <ConferenceCard key={conf.id} conf={conf} />
             ))}
@@ -257,24 +255,24 @@ export default async function Home() {
       </section>
 
       {/* Awards Section */}
-      <section className='py-32 px-6 bg-white overflow-hidden relative'>
+      <section className='py-4 sm:py-8 md:py-12 lg:py-16 bg-white overflow-hidden relative'>
         <div className='absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px]' />
-        <FadeIn className='max-w-7xl mx-auto space-y-20'>
-          <div className='text-center space-y-6 max-w-3xl mx-auto'>
-            <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]'>
+        <FadeIn className='section-container space-y-8 sm:space-y-12'>
+          <div className='text-center space-y-3 sm:space-y-4 max-w-3xl mx-auto'>
+            <div className='inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em]'>
               Honoring Excellence
             </div>
-            <h2 className='text-5xl md:text-7xl font-serif font-bold text-foreground leading-[0.9]'>
+            <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-foreground leading-tight sm:leading-[1.1]'>
               Celebrating{' '}
               <span className='text-primary italic'>Innovation</span> in
               Research
             </h2>
-            <p className='text-xl text-foreground/60 leading-relaxed font-medium'>
+            <p className='text-sm sm:text-base text-foreground/60 leading-relaxed font-medium'>
               Recognizing the outstanding contributions of researchers who push
               the boundaries of their fields.
             </p>
           </div>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-10'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10'>
             {awards.slice(0, 2).map((award) => (
               <AwardCard key={award.id} award={award} />
             ))}
@@ -283,7 +281,6 @@ export default async function Home() {
             <Button
               href='/awards'
               variant='primary'
-              size='lg'
               className='group'
             >
               View Hall of Fame
@@ -294,33 +291,33 @@ export default async function Home() {
       </section>
 
       {/* Featured Book */}
-      <section className='py-32 bg-slate-50 text-foreground relative overflow-hidden border-t border-slate-200'>
+      <section className='py-4 sm:py-8 md:py-12 lg:py-16 bg-slate-50 text-foreground relative overflow-hidden border-t border-slate-200'>
         <div className="absolute inset-0 bg-[url('/images/banners/hero-v2.png')] bg-cover bg-fixed opacity-10 grayscale" />
         <div className='absolute bottom-0 left-0 w-full h-1/2 bg-linear-to-t from-primary/20 to-transparent' />
 
-        <FadeIn className='max-w-7xl mx-auto px-6 relative z-10'>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center'>
-            <div className='space-y-10 order-2 lg:order-1'>
-              <div className='space-y-6'>
-                <div className='inline-block px-4 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]'>
+        <FadeIn className='section-container relative z-10'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 items-center'>
+            <div className='space-y-6 sm:space-y-8 order-2 lg:order-1'>
+              <div className='space-y-3 sm:space-y-4'>
+                <div className='inline-block px-3 py-1 sm:px-4 sm:py-1 rounded-full bg-primary/20 text-primary text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em]'>
                   Featured Publication
                 </div>
-                <h2 className='text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight'>
+                <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold leading-tight'>
                   New Release in <br />
                   <span className='text-primary'>Academic Series</span>
                 </h2>
               </div>
-              <div className='space-y-4 p-8 md:p-10 rounded-3xl bg-white shadow-2xl'>
-                <p className='text-3xl md:text-4xl font-serif font-bold text-foreground'>
+              <div className='space-y-3 sm:space-y-4 p-5 sm:p-8 rounded-3xl bg-white shadow-2xl'>
+                <p className='text-xl sm:text-2xl md:text-3xl font-serif font-bold text-foreground leading-tight'>
                   Modern Research Methodologies
                 </p>
-                <div className='flex flex-wrap gap-4 items-center text-foreground/50 text-sm font-bold uppercase tracking-widest'>
+                <div className='flex flex-wrap gap-2 sm:gap-4 items-center text-foreground/50 text-[10px] sm:text-xs font-bold uppercase tracking-widest'>
                   <span>By Dr Naseer Ganiee</span>
-                  <span className='size-1 rounded-full bg-primary' />
+                  <span className='size-1 rounded-full bg-primary hidden sm:inline-block' />
                   <span>ISBN: 978-3-16-148410-0</span>
                 </div>
               </div>
-              <p className='text-xl text-foreground/70 leading-relaxed font-light'>
+              <p className='text-sm sm:text-base text-foreground/70 leading-relaxed font-light'>
                 A comprehensive guide to contemporary research practices,
                 designed for scholars looking to elevate their methodology and
                 impact in the global research landscape.
@@ -328,48 +325,48 @@ export default async function Home() {
             </div>
 
             <div className='relative order-1 lg:order-2 flex justify-center'>
-              <div className='relative w-80 md:w-112.5 aspect-3/4 group'>
+              <div className='relative w-full max-w-[280px] sm:max-w-xs md:max-w-md aspect-3/4 group'>
                 <Image
                   src='/images/books/book1.png'
                   alt='Featured Book'
                   fill
                   className='object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transition-all duration-700 group-hover:scale-105 group-hover:-rotate-2'
                 />
-                <div className='absolute -inset-10 border border-primary/20 rounded-[3rem] -z-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-700 opacity-0 group-hover:opacity-100' />
+                <div className='absolute -inset-6 sm:-inset-10 border border-primary/20 rounded-[2.5rem] sm:rounded-[3rem] -z-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-700 opacity-0 group-hover:opacity-100' />
               </div>
-              <div className='absolute -top-12 -right-12 w-48 h-48 bg-primary/30 rounded-full blur-[100px] animate-pulse' />
-              <div className='absolute -bottom-12 -left-12 w-64 h-64 bg-primary/20 rounded-full blur-[120px] animate-pulse delay-1000' />
+              <div className='absolute -top-12 -right-12 w-48 h-48 bg-primary/30 rounded-full blur-[100px] animate-pulse pointer-events-none' />
+              <div className='absolute -bottom-12 -left-12 w-64 h-64 bg-primary/20 rounded-full blur-[120px] animate-pulse delay-1000 pointer-events-none' />
             </div>
           </div>
         </FadeIn>
       </section>
 
       {/* CTA Section */}
-      <section className='py-32 bg-white'>
-        <FadeIn className='max-w-7xl mx-auto px-6'>
-          <div className='glass-card bg-primary p-16 md:p-24 relative overflow-hidden shadow-[0_48px_80px_-16px_rgba(49,46,129,0.4)] border-none'>
+      <section className='py-4 sm:py-8 md:py-12 lg:py-16 bg-white'>
+        <FadeIn className='section-container'>
+          <div className='glass-card bg-primary p-6 sm:p-12 md:p-16 relative overflow-hidden shadow-[0_48px_80px_-16px_rgba(49,46,129,0.4)] border-none'>
             <div className='absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl' />
             <div className='absolute bottom-0 left-0 w-80 h-80 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl' />
 
-            <div className='relative z-10 text-center max-w-3xl mx-auto space-y-10'>
-              <h2 className='text-5xl md:text-6xl font-serif font-bold text-white leading-tight'>
+            <div className='relative z-10 text-center max-w-3xl mx-auto space-y-6 sm:space-y-8'>
+              <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight'>
                 Ready to Share Your Research?
               </h2>
-              <p className='text-white/90 text-xl font-medium leading-relaxed'>
+              <p className='text-sm sm:text-base text-white/90 font-medium leading-relaxed'>
                 Join our network of thousands of researchers and take the next
                 step in your academic career. We provide the platform, you
                 provide the brilliance.
               </p>
-              <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 max-w-lg mx-auto'>
+              <div className='flex flex-col sm:flex-row gap-4 pt-4 max-w-lg mx-auto justify-center'>
                 <Link
                   href='/contact'
-                  className='bg-white text-primary px-10 py-5 rounded-xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-all shadow-2xl shadow-black/20 text-center'
+                  className='bg-white text-primary px-6 py-3 sm:px-8 sm:py-4 rounded-xl font-black uppercase tracking-widest text-[10px] sm:text-xs hover:scale-105 transition-all shadow-2xl shadow-black/20 text-center'
                 >
                   Contact Us Now
                 </Link>
                 <Link
                   href='/gallery'
-                  className='bg-white/10 border border-white/30 backdrop-blur-md text-white px-10 py-5 rounded-xl font-black uppercase tracking-widest text-sm hover:bg-white/20 transition-all text-center'
+                  className='bg-white/10 border border-white/30 backdrop-blur-md text-white px-6 py-3 sm:px-8 sm:py-4 rounded-xl font-black uppercase tracking-widest text-[10px] sm:text-xs hover:bg-white/20 transition-all text-center'
                 >
                   View Awards
                 </Link>

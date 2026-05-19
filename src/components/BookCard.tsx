@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { BookOpen, User, Hash } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 interface BookProps {
   book: {
@@ -27,9 +28,9 @@ export const BookCard: React.FC<BookProps> = ({ book }) => {
         <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       </div>
 
-      <div className="p-8 space-y-6 grow flex flex-col">
+      <div className="p-6 sm:p-8 space-y-4 sm:space-y-6 grow flex flex-col">
         <div className="space-y-3 grow">
-          <h3 className="text-2xl font-serif font-bold text-foreground group-hover:text-primary transition-colors leading-tight">
+          <h3 className="text-xl sm:text-2xl font-serif font-bold text-foreground group-hover:text-primary transition-colors leading-tight">
             {book.title}
           </h3>
           
@@ -46,10 +47,10 @@ export const BookCard: React.FC<BookProps> = ({ book }) => {
         </div>
 
         <div className="pt-6 mt-auto">
-          <button className="w-full glass-button justify-center group/btn">
+          <Button variant="glass-button" className="w-full justify-center group/btn">
             View Publication
             <BookOpen className="size-4 group-hover/btn:scale-110 transition-transform" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

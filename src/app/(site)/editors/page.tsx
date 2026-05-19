@@ -23,26 +23,26 @@ export default async function EditorsPage() {
         image={siteConfig.hero.editorsImage}
       />
 
-      <div className="section-container relative z-10 py-24">
+      <div className="section-container relative z-10 py-4 sm:py-8 md:py-12 lg:py-16">
         {/* Director Message / Featured Section */}
         {editors.filter(e => e.category === "Governing Council" && e.role.includes("Director")).map((chief) => (
-          <div key={chief.id} className="mb-32">
-            <div className="flex items-center gap-6 mb-12">
+          <div key={chief.id} className="mb-8 sm:mb-16 lg:mb-20">
+            <div className="flex items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
               <div className="h-px grow bg-foreground/10" />
-              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">Chief Editor&apos;s Message</span>
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.5em] text-primary text-center">Chief Editor&apos;s Message</span>
               <div className="h-px grow bg-foreground/10" />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.8fr] gap-16 items-start">
-               <div className="space-y-6">
-                  <div className="aspect-4/5 rounded-3xl overflow-hidden shadow-2xl border-4 border-white relative group">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.8fr] gap-8 lg:gap-16 items-start">
+               <div className="space-y-6 max-w-sm mx-auto lg:max-w-none w-full">
+                  <div className="aspect-4/5 rounded-3xl overflow-hidden shadow-2xl border-4 border-white relative group w-full">
                     <Image 
                       src={chief.image} 
                       alt={chief.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-8">
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6 sm:p-8">
                        <div className="flex gap-4">
                           <Linkedin className="size-5 text-white hover:text-primary cursor-pointer transition-colors" />
                           <Mail className="size-5 text-white hover:text-primary cursor-pointer transition-colors" />
@@ -50,24 +50,24 @@ export default async function EditorsPage() {
                     </div>
                   </div>
                   <div className="text-center lg:text-left">
-                     <h3 className="text-2xl font-serif font-bold text-foreground">{chief.name}</h3>
-                     <p className="text-[10px] font-black uppercase tracking-widest text-primary mt-1">{chief.role}</p>
+                     <h3 className="text-xl sm:text-2xl font-serif font-bold text-foreground">{chief.name}</h3>
+                     <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-primary mt-1">{chief.role}</p>
                   </div>
                </div>
 
-               <div className="space-y-8">
-                  <p className="text-xl font-serif italic text-foreground/70 leading-relaxed border-l-4 border-primary/20 pl-8">
-                    &quot;{chief.bio || "Leading the charge in global academic excellence through collaborative research and peer-reviewed innovation."}&quot;
+               <div className="space-y-6 sm:space-y-8 text-center lg:text-left">
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl font-serif italic text-foreground/70 leading-relaxed border-t-2 pt-6 lg:border-t-0 lg:pt-0 lg:border-l-4 lg:pl-8 border-primary/20">
+                     &quot;{chief.bio || "Leading the charge in global academic excellence through collaborative research and peer-reviewed innovation."}&quot;
                   </p>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                     <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
+                     <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-2 text-left">
                         <span className="text-[9px] font-black uppercase tracking-widest text-foreground/30">Academic Affiliation</span>
                         <p className="text-sm font-bold text-foreground/80 leading-snug">{chief.institution}</p>
                      </div>
-                     <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+                     <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-2 text-left">
                         <span className="text-[9px] font-black uppercase tracking-widest text-foreground/30">Official Email</span>
-                        <p className="text-sm font-bold text-primary">{chief.email}</p>
+                        <p className="text-sm font-bold text-primary break-all">{chief.email}</p>
                      </div>
                   </div>
 
@@ -87,7 +87,7 @@ export default async function EditorsPage() {
                 <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">BOARD MEMBERS</span>
                 <div className="h-px w-12 bg-primary/20" />
               </div>
-              <h3 className="text-4xl font-serif font-bold text-foreground">Governing Council</h3>
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-foreground">Governing Council</h3>
            </div>
            
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -133,31 +133,29 @@ export default async function EditorsPage() {
         </div>
 
         {/* Joining CTA */}
-        <div className="mt-40">
-           <GlassContainer variant="light" className="p-12 md:p-20 bg-primary border-none overflow-hidden relative group">
+        <div className="mt-8 sm:mt-16 lg:mt-24">
+           <GlassContainer variant="light" className="p-5 sm:p-12 md:p-16 bg-primary border-none overflow-hidden relative group">
               <div className="absolute top-0 right-0 w-150 h-150 bg-white/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700" />
               
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-16 items-center">
-                 <div className="space-y-8">
-                    <h2 className="text-5xl md:text-7xl font-serif font-bold text-white leading-tight">
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-16 items-center">
+                 <div className="space-y-4 sm:space-y-6 text-center lg:text-left">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight">
                        Shape the Future of <br/>
-                       <span className="italic opacity-80">Global Research</span>
+                       <span className="italic opacity-80 text-primary-200">Global Research</span>
                     </h2>
-                    <p className="text-xl text-white/80 max-w-xl font-medium leading-relaxed">
+                    <p className="text-sm sm:text-base lg:text-lg text-white/80 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
                        We are always looking for distinguished scholars to join our editorial board and reviewers&apos; council. Contribute your expertise to a global forum.
                     </p>
-                    <div className="flex flex-wrap gap-6">
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                        <Button 
                         href="/contact" 
                         variant="light"
-                        size="lg"
                        >
                           Apply for Membership
                        </Button>
                        <Button 
                         href="/about" 
                         variant="glass"
-                        size="lg"
                        >
                           <BookOpen className="size-5 mr-2" />
                           View Guidelines

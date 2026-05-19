@@ -1,20 +1,28 @@
 import Link from "next/link";
-import { GraduationCap, Mail, Phone, MapPin, ExternalLink } from "lucide-react";
+import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 import siteConfig from "@/data/siteConfig.json";
+import Logo from "@/components/ui/Logo";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-50 text-foreground border-t border-slate-200 pt-20 pb-10">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+    <footer className="bg-slate-50 text-foreground border-t border-slate-200 py-8 sm:py-12 md:py-16">
+      <div className="section-container">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
           {/* Brand & About */}
           <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="bg-primary p-2 rounded-xl">
-                <GraduationCap className="size-6 text-foreground" />
+            <Link href="/" className="flex items-center gap-3 group shrink-0 w-fit">
+              <div className="bg-primary p-2 rounded-xl transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 shadow-lg shadow-primary/20 flex items-center justify-center">
+                <Logo className="size-5" variant="white" />
               </div>
-              <span className="font-serif text-2xl font-bold">Conference Event</span>
-            </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-base font-black tracking-tight leading-tight text-primary">
+                  Mindgates Research
+                </span>
+                <span className="text-[8px] uppercase tracking-[0.2em] font-black leading-none text-foreground/40 mt-0.5">
+                  Conference Forum
+                </span>
+              </div>
+            </Link>
             <p className="text-foreground/60 text-sm leading-relaxed">
               {siteConfig.description}
             </p>

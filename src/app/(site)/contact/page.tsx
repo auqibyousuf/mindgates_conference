@@ -4,6 +4,7 @@ import { GlassContainer } from '@/components/GlassContainer'
 
 import { SubPageHero } from '@/components/SubPageHero';
 import siteConfig from '@/data/siteConfig.json';
+import { Button } from '@/components/ui/Button';
 
 export default function ContactPage() {
   return (
@@ -17,13 +18,13 @@ export default function ContactPage() {
         image={siteConfig.hero.image}
       />
 
-      <div className='max-w-7xl mx-auto px-6 py-24'>
+      <div className='section-container py-4 sm:py-8 md:py-12 lg:py-16'>
 
-        <div className='grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-20 items-start'>
+        <div className='grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-16 items-start'>
           {/* Contact Form */}
           <GlassContainer
             variant='light'
-            className='p-10 md:p-16 border-none shadow-[0_48px_80px_-16px_rgba(0,0,0,0.08)]'
+            className='p-5 sm:p-10 md:p-12 border-none shadow-[0_48px_80px_-16px_rgba(0,0,0,0.08)]'
           >
             <form className='space-y-8'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
@@ -69,17 +70,17 @@ export default function ContactPage() {
                   placeholder='How can we help you?'
                 />
               </div>
-              <button className='glass-button w-full justify-center py-5 shadow-2xl shadow-primary/20 group'>
+              <Button type='submit' variant='glass-button' className='w-full justify-center py-5 shadow-2xl shadow-primary/20 group'>
                 Send Message{' '}
                 <Send className='size-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform' />
-              </button>
+              </Button>
             </form>
           </GlassContainer>
 
           {/* Contact Details */}
-          <div className='space-y-12'>
-            <div className='space-y-8'>
-              <h3 className='text-3xl font-serif font-bold text-foreground'>
+          <div className='space-y-8 sm:space-y-12'>
+            <div className='space-y-4 sm:space-y-6'>
+              <h3 className='text-xl sm:text-2xl font-serif font-bold text-foreground'>
                 Contact Information
               </h3>
               <div className='space-y-6'>
@@ -139,7 +140,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className='space-y-6 pt-12 border-t border-foreground/5'>
+            <div className='space-y-6 pt-8 lg:pt-12 border-t border-foreground/5'>
               <div className='flex items-center gap-4 text-foreground/60 font-medium'>
                 <Clock className='size-5 text-primary' />
                 <span>Mon - Fri: 9:00 AM - 6:00 PM</span>

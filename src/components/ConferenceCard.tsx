@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Calendar, Users, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 interface ConferenceProps {
   conf: {
@@ -30,7 +31,7 @@ export const ConferenceCard: React.FC<ConferenceProps> = ({ conf }) => {
 
   return (
     <div className="glass-card group hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col h-full">
-      <div className="p-8 space-y-6 grow">
+      <div className="p-6 sm:p-8 space-y-4 sm:space-y-6 grow">
         <div className="flex justify-between items-start">
           <div className="flex gap-2" suppressHydrationWarning>
             <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-primary/20">
@@ -50,7 +51,7 @@ export const ConferenceCard: React.FC<ConferenceProps> = ({ conf }) => {
           <Calendar className="size-5 text-foreground/20" />
         </div>
         
-        <h3 className="text-2xl font-serif font-bold group-hover:text-primary transition-colors leading-tight">
+        <h3 className="text-xl sm:text-2xl font-serif font-bold group-hover:text-primary transition-colors leading-tight">
           {conf.title}
         </h3>
         
@@ -79,30 +80,36 @@ export const ConferenceCard: React.FC<ConferenceProps> = ({ conf }) => {
         <div className="flex gap-2" suppressHydrationWarning>
           {isPast ? (
             conf.proceedingsUrl ? (
-              <Link 
+              <Button 
                 href={conf.proceedingsUrl} 
                 target="_blank"
-                className="text-[10px] font-black uppercase tracking-widest bg-primary text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95"
+                variant="primary"
+                size="sm"
+                className="text-[10px] uppercase tracking-widest px-4 py-2"
               >
                 Proceedings
-              </Link>
+              </Button>
             ) : (
-              <button 
+              <Button 
                 disabled
-                className="text-[10px] font-black uppercase tracking-widest bg-slate-200 text-slate-400 px-4 py-2 rounded-lg cursor-not-allowed"
+                variant="secondary"
+                size="sm"
+                className="text-[10px] uppercase tracking-widest px-4 py-2 bg-slate-200 text-slate-400 border-none shadow-none hover:translate-y-0"
               >
                 Closed
-              </button>
+              </Button>
             )
           ) : (
             conf.brochureUrl && (
-              <Link 
+              <Button 
                 href={conf.brochureUrl} 
                 target="_blank"
-                className="text-[10px] font-black uppercase tracking-widest bg-primary text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95"
+                variant="primary"
+                size="sm"
+                className="text-[10px] uppercase tracking-widest px-4 py-2"
               >
                 Brochure
-              </Link>
+              </Button>
             )
           )}
         </div>

@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react'
 import {
   Menu,
   X,
-  GraduationCap,
   ChevronRight,
   ChevronDown,
   Calendar,
@@ -18,6 +17,7 @@ import {
   LogOut,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Logo from '@/components/ui/Logo'
 
 const NAV_STRUCTURE = [
   { name: 'Home', href: '/' },
@@ -133,13 +133,16 @@ export default function Navbar({ isAdmin = false }: { isAdmin?: boolean }) {
           <Link href='/' className='flex items-center gap-3 group shrink-0'>
             <div
               className={cn(
-                'p-2 rounded-xl transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 shadow-lg',
+                'p-2 rounded-xl transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 shadow-lg flex items-center justify-center',
                 scrolled
                   ? 'bg-primary shadow-primary/20'
-                  : 'bg-primary shadow-lg border border-primary/20',
+                  : 'bg-white shadow-lg border border-white/20',
               )}
             >
-              <GraduationCap className='size-5 transition-colors duration-500 text-white' />
+              <Logo 
+                className="size-5 transition-all duration-500"
+                variant={scrolled ? 'white' : 'primary'}
+              />
             </div>
             <div className='flex flex-col'>
               <span

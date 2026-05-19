@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Lock, GraduationCap, ChevronRight, AlertCircle } from 'lucide-react';
+import { Lock, ChevronRight, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import siteConfig from '@/data/siteConfig.json';
+import Logo from '@/components/ui/Logo';
+import { Button } from '@/components/ui/Button';
 
 export default function LoginPage() {
   const [password, setPassword] = useState('');
@@ -26,8 +29,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
       <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
         <div className="text-center space-y-4">
-          <div className="inline-flex p-4 rounded-3xl bg-primary shadow-2xl shadow-primary/20 scale-110 mb-2">
-            <GraduationCap className="size-8 text-white" />
+          <div className="inline-flex p-2 rounded-3xl bg-white shadow-2xl shadow-primary/10 scale-125 mb-4">
+            <Logo className="size-12" variant="primary" />
           </div>
           <div>
             <h1 className="text-3xl font-serif font-bold text-foreground">Management Console</h1>
@@ -59,21 +62,23 @@ export default function LoginPage() {
               </div>
             )}
 
-            <button 
+            <Button 
               type="submit"
-              className="w-full bg-primary text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-xl shadow-primary/20 active:scale-[0.98]"
+              variant="primary"
+              className="w-full py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:-translate-y-0.5"
             >
               Sign In
               <ChevronRight className="size-4" />
-            </button>
+            </Button>
 
-            <button 
+            <Button 
               type="button"
               onClick={() => router.push('/')}
-              className="w-full bg-slate-50 text-foreground/40 py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-slate-100 transition-all border border-slate-100"
+              variant="light"
+              className="w-full py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px] bg-slate-50 text-foreground/40 hover:bg-slate-100 border border-slate-100 hover:-translate-y-0.5"
             >
               Go to Homepage
-            </button>
+            </Button>
           </form>
 
           <p className="text-center text-[9px] text-foreground/30 font-medium">

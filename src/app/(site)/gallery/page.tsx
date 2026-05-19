@@ -27,9 +27,9 @@ export default function GalleryPage() {
         image={siteConfig.hero.galleryImage}
       />
 
-      <div className="max-w-7xl mx-auto px-6 py-20">
+      <div className="section-container py-4 sm:py-8 md:py-12 lg:py-16">
         {/* Gallery Grid */}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 lg:gap-8 space-y-6 lg:space-y-8">
            {images.map((img, i) => (
              <GlassContainer key={i} variant="light" className="p-0 overflow-hidden group cursor-pointer break-inside-avoid shadow-2xl">
                 <div className="relative aspect-4/3 overflow-hidden">
