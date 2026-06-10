@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ToastProvider } from "@/components/ui/Toast";
 
 export const metadata: Metadata = {
   title: "Mindgates Research conference forum | Elevating Scholarly Excellence",
@@ -17,9 +18,11 @@ export default function RootLayout({
         className="antialiased min-h-screen flex flex-col"
         suppressHydrationWarning
       >
-        <main className="grow">
-          {children}
-        </main>
+        <ToastProvider>
+          <main className="grow">
+            {children}
+          </main>
+        </ToastProvider>
       </body>
     </html>
   );
