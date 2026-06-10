@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "mindgatesconference",
+  "account_id": "4942421717b64dea6563f65c1081e51d",
   "compatibility_date": "2026-05-07",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
