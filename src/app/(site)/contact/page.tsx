@@ -1,12 +1,90 @@
-import React from 'react'
-import { Mail, Phone, MapPin, Send, Clock, Globe } from 'lucide-react'
-import { GlassContainer } from '@/components/GlassContainer'
+'use client'
 
-import { SubPageHero } from '@/components/SubPageHero';
-import siteConfig from '@/data/siteConfig.json';
-import { Button } from '@/components/ui/Button';
+import React, { useState, useEffect } from 'react'
+import { Mail, Phone, MapPin, Send, Clock, Globe, Check } from 'lucide-react'
+import { GlassContainer } from '@/components/GlassContainer'
+import { SubPageHero } from '@/components/SubPageHero'
+import siteConfig from '@/data/siteConfig.json'
+import { Button } from '@/components/ui/Button'
+import { useToast } from '@/components/ui/Toast'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 
 export default function ContactPage() {
+  const { success, error, info } = useToast()
+  const [config, setConfig] = useState(siteConfig)
+  
+  useEffect(() => {
+    fetch('/api/save-json?filename=siteConfig.json')
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .then((data) => {
+        if (data) {
+          setConfig(data);
+        }
+      })
+      .catch((err) => console.error('Failed to load siteConfig dynamically', err));
+  }, []);
+
+  const addressParts = (config?.contact?.address || "").split('|');
+  const srinagarAddr = addressParts[0]?.trim() || "Mindgates Softtech Solutions, Bulbul Bagh Barzulla Srinagar-190005";
+  const jammuAddr = addressParts[1]?.replace(/Jammu Office:/i, "")?.trim() || "Anand Nagar Bohri Jammu";
+  const phoneNum = config?.contact?.phone || "7006472072, 6005221157";
+  const emailAddr = config?.contact?.email || "info@mindgatesresearch.in";
+  
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [subject, setSubject] = useState('Conference Inquiry')
+  const [message, setMessage] = useState('')
+  
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+
+  const subjectOptions = [
+    { value: 'Conference Inquiry', label: 'Conference Inquiry' },
+    { value: 'Book Publishing', label: 'Book Publishing' },
+    { value: 'Awards Nomination', label: 'Awards Nomination' },
+    { value: 'General Feedback', label: 'General Feedback' },
+  ]
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!name || !email || !subject || !message) {
+      error('Please fill in all form fields')
+      return
+    }
+
+    setSubmitting(true)
+    info('Sending message...')
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, subject, message }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok && data.success) {
+        success('Message sent successfully!')
+        setSubmitted(true)
+        setName('')
+        setEmail('')
+        setSubject('Conference Inquiry')
+        setMessage('')
+      } else {
+        throw new Error(data.error || 'Failed to send message')
+      }
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : 'Failed to send message'
+      error(errMsg)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   return (
     <main className='min-h-screen bg-background overflow-hidden'>
       <SubPageHero 
@@ -15,7 +93,7 @@ export default function ContactPage() {
         description="Have questions about an upcoming conference or publication? Our team is here to guide you through every step of your scholarly journey."
         badge="Connect With Us"
         icon={Mail}
-        image={siteConfig.hero.image}
+        image={config.hero?.image || "/images/banners/main-hero.png"}
       />
 
       <div className='section-container py-4 sm:py-8 md:py-12 lg:py-16'>
@@ -26,55 +104,89 @@ export default function ContactPage() {
             variant='light'
             className='p-5 sm:p-10 md:p-12 border-none shadow-[0_48px_80px_-16px_rgba(0,0,0,0.08)]'
           >
-            <form className='space-y-8'>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+            {submitted ? (
+              <div className='text-center py-12 space-y-6'>
+                <div className='size-20 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-500 animate-bounce'>
+                  <Check className='size-10' />
+                </div>
+                <h3 className='text-2xl font-serif font-bold text-foreground'>
+                  Thank you!
+                </h3>
+                <p className='text-foreground/60 max-w-md mx-auto text-sm leading-relaxed'>
+                  Your message has been sent successfully. We will get back to you at our earliest convenience.
+                </p>
+                <Button
+                  variant='glass-button'
+                  onClick={() => setSubmitted(false)}
+                  className='mt-4'
+                >
+                  Send Another Message
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className='space-y-8'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+                  <div className='space-y-3'>
+                    <label className='text-[10px] uppercase font-black tracking-widest text-foreground/40 ml-1'>
+                      Full Name
+                    </label>
+                    <input
+                      type='text'
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className='w-full bg-white/50 border border-foreground/20 dark:border-white/20 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all font-medium text-foreground placeholder:text-foreground/20'
+                      placeholder='Dr. John Doe'
+                    />
+                  </div>
+                  <div className='space-y-3'>
+                    <label className='text-[10px] uppercase font-black tracking-widest text-foreground/40 ml-1'>
+                      Email Address
+                    </label>
+                    <input
+                      type='email'
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className='w-full bg-white/50 border border-foreground/20 dark:border-white/20 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all font-medium text-foreground placeholder:text-foreground/20'
+                      placeholder='john@university.edu'
+                    />
+                  </div>
+                </div>
                 <div className='space-y-3'>
                   <label className='text-[10px] uppercase font-black tracking-widest text-foreground/40 ml-1'>
-                    Full Name
+                    Subject
                   </label>
-                  <input
-                    type='text'
-                    className='w-full bg-white/50 border border-foreground/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all font-medium text-foreground placeholder:text-foreground/20'
-                    placeholder='Dr. John Doe'
+                  <CustomSelect
+                    options={subjectOptions}
+                    value={subject}
+                    onChange={setSubject}
                   />
                 </div>
                 <div className='space-y-3'>
                   <label className='text-[10px] uppercase font-black tracking-widest text-foreground/40 ml-1'>
-                    Email Address
+                    Message
                   </label>
-                  <input
-                    type='email'
-                    className='w-full bg-white/50 border border-foreground/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all font-medium text-foreground placeholder:text-foreground/20'
-                    placeholder='john@university.edu'
+                  <textarea
+                    rows={6}
+                    required
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className='w-full bg-white/50 border border-foreground/20 dark:border-white/20 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all font-medium text-foreground placeholder:text-foreground/20 resize-none'
+                    placeholder='How can we help you?'
                   />
                 </div>
-              </div>
-              <div className='space-y-3'>
-                <label className='text-[10px] uppercase font-black tracking-widest text-foreground/40 ml-1'>
-                  Subject
-                </label>
-                <select className='w-full bg-white/50 border border-foreground/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all font-medium text-foreground appearance-none'>
-                  <option>Conference Inquiry</option>
-                  <option>Book Publishing</option>
-                  <option>Awards Nomination</option>
-                  <option>General Feedback</option>
-                </select>
-              </div>
-              <div className='space-y-3'>
-                <label className='text-[10px] uppercase font-black tracking-widest text-foreground/40 ml-1'>
-                  Message
-                </label>
-                <textarea
-                  rows={6}
-                  className='w-full bg-white/50 border border-foreground/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all font-medium text-foreground placeholder:text-foreground/20 resize-none'
-                  placeholder='How can we help you?'
-                />
-              </div>
-              <Button type='submit' variant='glass-button' className='w-full justify-center py-5 shadow-2xl shadow-primary/20 group'>
-                Send Message{' '}
-                <Send className='size-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform' />
-              </Button>
-            </form>
+                <Button
+                  type='submit'
+                  disabled={submitting}
+                  variant='glass-button'
+                  className='w-full justify-center py-5 shadow-2xl shadow-primary/20 group cursor-pointer'
+                >
+                  {submitting ? 'Sending...' : 'Send Message'}{' '}
+                  <Send className='size-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform' />
+                </Button>
+              </form>
+            )}
           </GlassContainer>
 
           {/* Contact Details */}
@@ -93,8 +205,7 @@ export default function ContactPage() {
                       Srinagar Office
                     </p>
                     <p className='text-foreground/70 font-medium leading-relaxed'>
-                      Mindgates Softtech Solutions, Bulbul Bagh Barzulla
-                      Srinagar-190005
+                      {srinagarAddr}
                     </p>
                   </div>
                 </div>
@@ -107,7 +218,7 @@ export default function ContactPage() {
                       Jammu Office
                     </p>
                     <p className='text-foreground/70 font-medium leading-relaxed'>
-                      Anand Nagar Bohri Jammu
+                      {jammuAddr}
                     </p>
                   </div>
                 </div>
@@ -120,7 +231,7 @@ export default function ContactPage() {
                       Phone Numbers
                     </p>
                     <p className='text-foreground/70 font-bold'>
-                      7006472072, 6005221157
+                      {phoneNum}
                     </p>
                   </div>
                 </div>
@@ -133,7 +244,7 @@ export default function ContactPage() {
                       Email Address
                     </p>
                     <p className='text-foreground/70 font-bold'>
-                      info@mindgatesresearch.in
+                      {emailAddr}
                     </p>
                   </div>
                 </div>

@@ -1,9 +1,19 @@
 import Link from "next/link";
 import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
-import siteConfig from "@/data/siteConfig.json";
+import siteConfigDefault from "@/data/siteConfig.json";
+import { readData } from "@/lib/data-handler";
+import { SiteConfig } from "@/lib/types";
 import Logo from "@/components/ui/Logo";
 
-export default function Footer() {
+export default async function Footer() {
+  const siteConfig = (await readData("siteConfig.json")) as SiteConfig || (siteConfigDefault as SiteConfig);
+  
+  const addressParts = (siteConfig?.contact?.address || "").split('|');
+  const srinagarAddr = addressParts[0]?.trim() || "Mindgates Softtech Solutions, Bulbul Bagh Barzulla Srinagar-190005";
+  const jammuAddr = addressParts[1]?.replace(/Jammu Office:/i, "")?.trim() || "Anand Nagar Bohri Jammu";
+  const phoneNum = siteConfig?.contact?.phone || "7006472072, 6005221157";
+  const emailAddr = siteConfig?.contact?.email || "info@mindgatesresearch.in";
+
   return (
     <footer className="bg-slate-50 text-foreground border-t border-slate-200 py-8 sm:py-12 md:py-16">
       <div className="section-container">
@@ -54,23 +64,23 @@ export default function Footer() {
                 <MapPin className="size-5 text-primary shrink-0" />
                 <div className="space-y-2">
                   <p className="font-bold text-foreground/80">Srinagar Office:</p>
-                  <p>Mindgates Softtech Solutions, Bulbul Bagh Barzulla Srinagar-190005</p>
+                  <p>{srinagarAddr}</p>
                 </div>
               </li>
               <li className="flex items-start gap-3 text-sm text-foreground/60">
                 <MapPin className="size-5 text-primary shrink-0" />
                 <div className="space-y-2">
                   <p className="font-bold text-foreground/80">Jammu Office:</p>
-                  <p>Anand Nagar Bohri Jammu</p>
+                  <p>{jammuAddr}</p>
                 </div>
               </li>
               <li className="flex items-center gap-3 text-sm text-foreground/60">
                 <Phone className="size-5 text-primary shrink-0" />
-                <span>7006472072, 6005221157</span>
+                <span>{phoneNum}</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-foreground/60">
                 <Mail className="size-5 text-primary shrink-0" />
-                <span>info@mindgatesresearch.in</span>
+                <span>{emailAddr}</span>
               </li>
             </ul>
           </div>

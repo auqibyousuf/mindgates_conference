@@ -8,13 +8,16 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const filename = searchParams.get('filename');
     
-    const allowedFiles = ['siteConfig.json', 'conferences.json', 'books.json', 'awards.json', 'editors.json', 'notifications.json', 'stats.json'];
+    const allowedFiles = ['siteConfig.json', 'conferences.json', 'books.json', 'awards.json', 'editors.json', 'notifications.json', 'stats.json', 'submissions.json'];
     if (!filename || !allowedFiles.includes(filename)) {
       return NextResponse.json({ error: 'Invalid filename' }, { status: 400 });
     }
 
     const data = await readData(filename);
     if (!data) {
+      if (filename === 'submissions.json') {
+        return NextResponse.json([]);
+      }
       return NextResponse.json({ error: 'Data not found' }, { status: 404 });
     }
 
@@ -31,7 +34,7 @@ export async function POST(request: Request) {
   try {
     const { filename, data } = await request.json();
     
-    const allowedFiles = ['siteConfig.json', 'conferences.json', 'books.json', 'awards.json', 'editors.json', 'notifications.json', 'stats.json'];
+    const allowedFiles = ['siteConfig.json', 'conferences.json', 'books.json', 'awards.json', 'editors.json', 'notifications.json', 'stats.json', 'submissions.json'];
     if (!allowedFiles.includes(filename)) {
       return NextResponse.json({ error: 'Invalid filename' }, { status: 400 });
     }

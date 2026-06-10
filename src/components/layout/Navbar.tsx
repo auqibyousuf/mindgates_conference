@@ -246,7 +246,7 @@ export default function Navbar({ isAdmin = false }: { isAdmin?: boolean }) {
                 <div className='w-px h-6 bg-foreground/5 mx-2' />
 
                 <Link
-                  href='/conferences'
+                  href='/submit-paper'
                   className={cn(
                     'text-[9px] font-black uppercase tracking-[0.2em] py-3 px-6 rounded-xl transition-all active:scale-95 flex items-center gap-2',
                     scrolled
@@ -336,10 +336,17 @@ export default function Navbar({ isAdmin = false }: { isAdmin?: boolean }) {
               ))}
               <Link
                 href='/conferences'
-                className='bg-primary text-white text-center py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] mt-4 shadow-xl shadow-primary/20'
+                className='border border-foreground/10 text-foreground text-center py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] mt-4'
                 onClick={() => setIsOpen(false)}
               >
                 Join Conference
+              </Link>
+              <Link
+                href='/submit-paper'
+                className='bg-primary text-white text-center py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] mt-2 shadow-xl shadow-primary/20'
+                onClick={() => setIsOpen(false)}
+              >
+                Submit Paper
               </Link>
             </>
           ) : (
