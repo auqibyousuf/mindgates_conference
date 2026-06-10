@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
-  "name": "conference-event",
+  "name": "mindgatesconference",
   "compatibility_date": "2026-05-07",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
@@ -11,7 +11,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "conference-event"
+      "service": "mindgatesconference"
     }
   ],
   "images": {
