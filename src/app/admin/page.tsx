@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Save, RefreshCw, FileText, Settings, CheckCircle2,
-  AlertCircle, Plus, Trash2, Edit3, ChevronRight, X, Bell,
+  AlertCircle, AlertTriangle, Plus, Trash2, Edit3, ChevronRight, X, Bell,
   Calendar, Award, Users, BarChart, User, Mail, Phone,
   Building2, MapPin
 } from 'lucide-react';
@@ -12,6 +12,7 @@ import { GlassContainer } from '@/components/GlassContainer';
 import NextImage from 'next/image';
 import { cn } from '@/lib/utils';
 import { CustomSelect } from '@/components/ui/CustomSelect';
+import { useToast } from '@/components/ui/Toast';
 
 type AdminStatus = { type: 'success' | 'error', msg: string } | null;
 
@@ -83,8 +84,11 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<AdminStatus>(null);
   const [editingItemIndex, setEditingItemIndex] = useState<number | null>(null);
+  const [viewOnlyMode, setViewOnlyMode] = useState(false);
   const [newItemMode, setNewItemMode] = useState(false);
+  const [itemToDeleteIndex, setItemToDeleteIndex] = useState<number | null>(null);
   const router = useRouter();
+  const { success: toastSuccess, error: toastError } = useToast();
 
   const files: FileConfig[] = [
     { name: 'siteConfig.json', label: 'Site Settings', icon: Settings, type: 'object' },
@@ -159,13 +163,16 @@ export default function AdminPage() {
       if (response.ok) {
         setData(updatedData);
         setStatus({ type: 'success', msg: 'Changes saved successfully!' });
+        toastSuccess('Changes saved successfully!');
         setEditingItemIndex(null);
+        setViewOnlyMode(false);
         setNewItemMode(false);
       } else {
         throw new Error('Failed to save');
       }
     } catch {
       setStatus({ type: 'error', msg: 'Failed to save changes' });
+      toastError('Failed to save changes');
     }
     setLoading(false);
   };
@@ -183,16 +190,48 @@ export default function AdminPage() {
     handleSave(newData);
   };
 
-  const handleDeleteArrayItem = (index: number) => {
-    if (!Array.isArray(data)) return;
-    if (window.confirm('Are you sure you want to delete this item?')) {
-      const newData = data.filter((_, i) => i !== index);
-      handleSave(newData);
-    }
+  const confirmDeleteItem = () => {
+    if (itemToDeleteIndex === null || !Array.isArray(data)) return;
+    const newData = data.filter((_, i) => i !== itemToDeleteIndex);
+    setItemToDeleteIndex(null);
+    handleSave(newData);
   };
 
   return (
     <div className="max-w-[1440px] mx-auto px-6 pt-32 pb-24">
+      {/* Delete Confirmation Modal */}
+      {itemToDeleteIndex !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5 animate-in zoom-in-95 duration-200">
+            <div className="size-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center">
+              <AlertTriangle className="size-6" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-bold font-sans tracking-tight text-foreground">Delete Item</h3>
+              <p className="text-xs text-foreground/60 leading-relaxed">
+                Are you sure you want to delete this item? This action will immediately remove it from your website content.
+              </p>
+            </div>
+            <div className="flex items-center justify-end gap-3 pt-3">
+              <button
+                type="button"
+                onClick={() => setItemToDeleteIndex(null)}
+                className="px-5 py-2.5 rounded-xl font-bold text-xs border border-zinc-200 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50 transition-colors text-foreground/70 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteItem}
+                className="px-5 py-2.5 rounded-xl font-bold text-xs bg-red-600 hover:bg-red-700 text-white transition-colors shadow-md shadow-red-600/20 cursor-pointer"
+              >
+                Delete Item
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col lg:grid lg:grid-cols-[260px_1fr] gap-10 items-start">
            {/* Sidebar */}
            <div className="w-full space-y-2 sticky top-32 bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/50 dark:border-zinc-800/40 rounded-3xl p-5 shadow-sm backdrop-blur-md">
@@ -204,6 +243,7 @@ export default function AdminPage() {
                         setActiveTab(file.name);
                         setData(null);
                         setEditingItemIndex(null);
+                        setViewOnlyMode(false);
                         setNewItemMode(false);
                       }}
                       className={`w-full flex items-center gap-3 p-3.5 rounded-2xl transition-all text-left cursor-pointer ${
@@ -223,7 +263,7 @@ export default function AdminPage() {
            <div className="grow space-y-6 w-full">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white/50 p-6 rounded-2xl border border-white shadow-sm">
                  <div className="space-y-0.5">
-                    <h2 className="text-xl font-serif font-bold text-foreground">{currentFile?.label}</h2>
+                    <h2 className="text-xl font-sans font-bold tracking-tight text-foreground">{currentFile?.label}</h2>
                     <p className="text-xs text-foreground/40">Editing <span className="text-primary font-medium">{activeTab}</span></p>
                  </div>
                  {currentFile?.type === 'array' && activeTab !== 'submissions.json' && editingItemIndex === null && !newItemMode && (
@@ -232,7 +272,7 @@ export default function AdminPage() {
                      className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-primary/90 transition-all shadow-md shadow-primary/10 cursor-pointer"
                    >
                       <Plus className="size-3.5" />
-                      Add New Item
+                      Add
                    </button>
                  )}
               </div>
@@ -260,11 +300,13 @@ export default function AdminPage() {
                      <ArrayEditor
                         data={data as unknown[]}
                         onSave={handleUpdateArrayItem}
-                        onDelete={handleDeleteArrayItem}
+                        onDelete={(index) => setItemToDeleteIndex(index)}
                         onAdd={handleAddArrayItem}
                         loading={loading}
                         editingIndex={editingItemIndex}
                         setEditingIndex={setEditingItemIndex}
+                        viewOnly={viewOnlyMode}
+                        setViewOnly={setViewOnlyMode}
                         newMode={newItemMode}
                         setNewMode={setNewItemMode}
                         activeTab={activeTab}
@@ -280,6 +322,7 @@ export default function AdminPage() {
 
 function FileUploadButton({ onUpload, label, disabled = false }: { onUpload: (url: string) => void, label: string, disabled?: boolean }) {
   const [uploading, setUploading] = useState(false);
+  const { success: toastSuccess, error: toastError } = useToast();
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
@@ -298,11 +341,12 @@ function FileUploadButton({ onUpload, label, disabled = false }: { onUpload: (ur
       const data = await res.json();
       if (data.success) {
         onUpload(data.url);
+        toastSuccess('File uploaded successfully');
       } else {
-        alert(data.error || 'Upload failed');
+        toastError(data.error || 'Upload failed');
       }
     } catch {
-      alert('Upload failed');
+      toastError('File upload error occurred');
     } finally {
       setUploading(false);
     }
@@ -453,7 +497,8 @@ function FileUploadField({ label, value, onChange, disabled = false }: { label: 
               src={value}
               width={400}
               height={160}
-              className="max-h-40 w-auto rounded-lg shadow-sm hover:scale-105 transition-transform object-contain"
+              style={{ width: 'auto', height: 'auto' }}
+              className="max-h-40 rounded-lg shadow-sm hover:scale-105 transition-transform object-contain"
               alt="Preview"
               unoptimized
             />
@@ -931,14 +976,14 @@ function StatsEditor({ data, onSave, loading }: { data: { heroStats: Record<stri
   return (
     <div className="space-y-8">
       <GlassContainer variant="light" className="p-8 border-none shadow-xl bg-white space-y-6">
-        <h3 className="text-xl font-serif font-bold text-foreground">Hero Floating Stats (White Cards)</h3>
+        <h3 className="text-xl font-sans font-bold tracking-tight text-foreground">Hero Floating Stats (White Cards)</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {formData.heroStats?.map((stat, i) => renderCard(stat, i, 'heroStats'))}
         </div>
       </GlassContainer>
 
       <GlassContainer variant="light" className="p-8 border-none shadow-xl bg-white space-y-6">
-        <h3 className="text-xl font-serif font-bold text-foreground">Global Stats (Blue Section)</h3>
+        <h3 className="text-xl font-sans font-bold tracking-tight text-foreground">Global Stats (Blue Section)</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {formData.globalStats?.map((stat, i) => renderCard(stat, i, 'globalStats'))}
         </div>
@@ -983,7 +1028,20 @@ function StatsEditor({ data, onSave, loading }: { data: { heroStats: Record<stri
   );
 }
 
-function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, setEditingIndex, newMode, setNewMode, activeTab }: {
+function ArrayEditor({
+  data,
+  onSave,
+  onDelete,
+  onAdd,
+  loading,
+  editingIndex,
+  setEditingIndex,
+  viewOnly,
+  setViewOnly,
+  newMode,
+  setNewMode,
+  activeTab
+}: {
   data: unknown[],
   onSave: (i: number, d: unknown) => void,
   onDelete: (i: number) => void,
@@ -991,6 +1049,8 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
   loading: boolean,
   editingIndex: number | null,
   setEditingIndex: (i: number | null) => void,
+  viewOnly: boolean,
+  setViewOnly: (b: boolean) => void,
   newMode: boolean,
   setNewMode: (b: boolean) => void,
   activeTab: string
@@ -1114,7 +1174,8 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
         }}
         onCancel={() => setNewMode(false)}
         loading={loading}
-        title="Add New Item"
+        title="Add"
+        initialEditing={true}
         activeTab={activeTab}
       />
     );
@@ -1131,9 +1192,13 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
       <ItemForm
         item={itemData}
         onSave={(updatedItem: unknown) => onSave(editingIndex, updatedItem)}
-        onCancel={() => setEditingIndex(null)}
+        onCancel={() => {
+          setEditingIndex(null);
+          setViewOnly(false);
+        }}
         loading={loading}
-        title="Edit Item"
+        title={viewOnly ? "Details" : "Edit Item"}
+        initialEditing={!viewOnly}
         activeTab={activeTab}
       />
     );
@@ -1147,13 +1212,13 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
           <FileText className="size-8" />
         </div>
         <div className="space-y-1">
-          <h3 className="font-serif font-bold text-lg text-foreground">
+          <h3 className="font-sans font-bold text-lg tracking-tight text-foreground">
             {isSubmissions ? "No Submitted Papers Yet" : "No Items Found"}
           </h3>
           <p className="text-xs text-foreground/45 max-w-sm">
             {isSubmissions
               ? "When researchers submit paper manuscripts through the registration portal, they will appear here automatically."
-              : "There are currently no items in this list. Click 'Add New Item' to create one."}
+              : "There are currently no items in this list. Click 'Add' to create one."}
           </p>
         </div>
         {!isSubmissions && (
@@ -1162,7 +1227,7 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
             className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold text-xs hover:bg-primary/90 transition-all shadow-md shadow-primary/10 cursor-pointer mt-2"
           >
             <Plus className="size-4" />
-            Add First Item
+            Add
           </button>
         )}
       </div>
@@ -1176,7 +1241,10 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
           return (
             <div
               key={i}
-              onClick={() => setEditingIndex(i)}
+              onClick={() => {
+                setViewOnly(true);
+                setEditingIndex(i);
+              }}
               className="group relative bg-white border border-zinc-200/50 dark:bg-zinc-900/60 dark:border-zinc-850/60 p-5 rounded-2xl shadow-xs hover:shadow-md hover:border-primary/25 transition-all duration-300 flex items-center justify-between gap-6 cursor-pointer overflow-hidden"
             >
               <div className="grow flex items-center gap-5">
@@ -1207,6 +1275,7 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
+                          setViewOnly(false);
                           setEditingIndex(i);
                         }}
                         className="p-2.5 text-primary hover:bg-primary/10 rounded-xl transition-all hover:scale-110 cursor-pointer bg-primary/5"
@@ -1226,7 +1295,15 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
                        <Trash2 className="size-4" />
                     </button>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-50 group-hover:bg-primary/5 transition-colors">
+                  <div 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setViewOnly(true);
+                      setEditingIndex(i);
+                    }}
+                    className="p-2 rounded-lg bg-slate-50 group-hover:bg-primary/5 transition-colors cursor-pointer"
+                    title="View Details"
+                  >
                     <ChevronRight className="size-4 text-slate-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                   </div>
                </div>
@@ -1237,12 +1314,21 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
   );
 }
 
-function ItemForm({ item, onSave, onCancel, loading, title, activeTab }: {
+function ItemForm({
+  item,
+  onSave,
+  onCancel,
+  loading,
+  title,
+  initialEditing,
+  activeTab
+}: {
   item: unknown,
   onSave: (d: unknown) => void,
   onCancel: () => void,
   loading: boolean,
   title: string,
+  initialEditing?: boolean,
   activeTab: string
 }) {
   const schemaTemplate = TAB_SCHEMAS[activeTab] || {};
@@ -1256,13 +1342,13 @@ function ItemForm({ item, onSave, onCancel, loading, title, activeTab }: {
   const [formData, setFormData] = useState<Record<string, unknown>>(() => normalizeItem(item));
   const isNewItem = title.toLowerCase().includes('add');
   const isReadOnly = activeTab === 'submissions.json';
-  const [isEditing, setIsEditing] = useState(!isReadOnly);
+  const [isEditing, setIsEditing] = useState(initialEditing !== undefined ? initialEditing : !isReadOnly);
 
   // Re-sync with item if it changes
   useEffect(() => {
     setFormData(normalizeItem(item));
-    setIsEditing(!isReadOnly);
-  }, [item, isReadOnly, activeTab]);
+    setIsEditing(initialEditing !== undefined ? initialEditing : !isReadOnly);
+  }, [item, isReadOnly, activeTab, initialEditing]);
 
   // Determine all fields to render
   const entries = (() => {
@@ -1299,7 +1385,12 @@ function ItemForm({ item, onSave, onCancel, loading, title, activeTab }: {
     <div className="animate-in zoom-in-95 duration-200 w-full">
       <GlassContainer variant="light" className="p-8 md:p-10 border-none shadow-2xl bg-white space-y-8">
         <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-            <h3 className="text-xl font-serif font-bold text-foreground">{displayTitle}</h3>
+            <div className="space-y-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                {isNewItem ? 'New Record' : (isEditing ? 'Editing Mode' : 'Details View')}
+              </span>
+              <h3 className="text-xl font-sans font-bold tracking-tight text-foreground">{displayTitle}</h3>
+            </div>
             <button onClick={onCancel} className="p-2 hover:bg-slate-50 rounded-full transition-colors cursor-pointer">
               <X className="size-5 text-foreground/40" />
             </button>
