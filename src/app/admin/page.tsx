@@ -33,6 +33,50 @@ const DERIVED_LINKS = [
   { label: 'Awards', value: '/awards' },
 ];
 
+const TAB_SCHEMAS: Record<string, Record<string, unknown>> = {
+  'conferences.json': {
+    title: '',
+    date: '',
+    startDate: '',
+    endDate: '',
+    venue: '',
+    status: 'Upcoming',
+    type: 'International',
+    brochureUrl: '',
+    proceedingsUrl: '',
+  },
+  'books.json': {
+    title: '',
+    author: '',
+    isbn: '',
+    image: '',
+  },
+  'awards.json': {
+    authorName: '',
+    title: '',
+    eventName: '',
+    eventDate: '',
+    eventVenue: '',
+    awardName: '',
+  },
+  'editors.json': {
+    name: '',
+    role: 'Director & Chief Editor',
+    institution: '',
+    image: '',
+    category: 'Governing Council',
+    email: '',
+    contact: '',
+    country: '',
+    bio: '',
+  },
+  'notifications.json': {
+    text: '',
+    category: 'Update',
+    date: '',
+  },
+};
+
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState('siteConfig.json');
   const [data, setData] = useState<unknown>(null);
@@ -1046,27 +1090,53 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
   };
 
   if (newMode) {
-    const emptyItem = Object.keys(data[0] || {}).reduce((acc: Record<string, unknown>, key) => {
-      if (activeTab === 'notifications.json' && !['text', 'category', 'date'].includes(key)) return acc;
-      acc[key] = "";
-      return acc;
-    }, {});
+    const schemaTemplate = TAB_SCHEMAS[activeTab] || {};
+    const sampleItem = (data && data.length > 0 && typeof data[0] === 'object' && data[0] !== null)
+      ? (data[0] as Record<string, unknown>)
+      : {};
 
-    return <ItemForm
-      item={emptyItem}
-      onSave={(item: unknown) => {
-        const itemWithId = { ...(item as Record<string, unknown>), id: `item-${Date.now()}` };
-        onAdd(itemWithId);
-      }}
-      onCancel={() => setNewMode(false)}
-      loading={loading}
-      title="Add New Item"
-      activeTab={activeTab}
-    />;
+    const emptyItem: Record<string, unknown> = { ...schemaTemplate };
+    Object.keys(sampleItem).forEach((k) => {
+      if (k !== 'id' && !(k in emptyItem)) {
+        emptyItem[k] = '';
+      }
+    });
+
+    return (
+      <ItemForm
+        item={emptyItem}
+        onSave={(item: unknown) => {
+          const itemWithId = {
+            ...(item as Record<string, unknown>),
+            id: (item as Record<string, unknown>).id || `item-${Date.now()}`
+          };
+          onAdd(itemWithId);
+        }}
+        onCancel={() => setNewMode(false)}
+        loading={loading}
+        title="Add New Item"
+        activeTab={activeTab}
+      />
+    );
   }
 
   if (editingIndex !== null) {
-    return <ItemForm item={data[editingIndex]} onSave={(updatedItem: unknown) => onSave(editingIndex, updatedItem)} onCancel={() => setEditingIndex(null)} loading={loading} title="Edit Item" activeTab={activeTab} />;
+    const rawItem = data[editingIndex];
+    const schemaTemplate = TAB_SCHEMAS[activeTab] || {};
+    const itemData = (typeof rawItem === 'object' && rawItem !== null)
+      ? { ...schemaTemplate, ...(rawItem as Record<string, unknown>) }
+      : { ...schemaTemplate };
+
+    return (
+      <ItemForm
+        item={itemData}
+        onSave={(updatedItem: unknown) => onSave(editingIndex, updatedItem)}
+        onCancel={() => setEditingIndex(null)}
+        loading={loading}
+        title="Edit Item"
+        activeTab={activeTab}
+      />
+    );
   }
 
   if (data.length === 0) {
@@ -1083,15 +1153,15 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
           <p className="text-xs text-foreground/45 max-w-sm">
             {isSubmissions
               ? "When researchers submit paper manuscripts through the registration portal, they will appear here automatically."
-              : "There are currently no items in this list. Click 'Add New Item' above to create one."}
+              : "There are currently no items in this list. Click 'Add New Item' to create one."}
           </p>
         </div>
         {!isSubmissions && (
           <button
             onClick={() => setNewMode(true)}
-            className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-primary/90 transition-all shadow-md shadow-primary/10 cursor-pointer mt-2"
+            className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold text-xs hover:bg-primary/90 transition-all shadow-md shadow-primary/10 cursor-pointer mt-2"
           >
-            <Plus className="size-3.5" />
+            <Plus className="size-4" />
             Add First Item
           </button>
         )}
@@ -1175,23 +1245,42 @@ function ItemForm({ item, onSave, onCancel, loading, title, activeTab }: {
   title: string,
   activeTab: string
 }) {
-  const [formData, setFormData] = useState<Record<string, unknown>>(item as Record<string, unknown>);
+  const schemaTemplate = TAB_SCHEMAS[activeTab] || {};
+  const normalizeItem = (raw: unknown): Record<string, unknown> => {
+    if (typeof raw === 'object' && raw !== null) {
+      return { ...schemaTemplate, ...(raw as Record<string, unknown>) };
+    }
+    return { ...schemaTemplate };
+  };
+
+  const [formData, setFormData] = useState<Record<string, unknown>>(() => normalizeItem(item));
   const isNewItem = title.toLowerCase().includes('add');
   const isReadOnly = activeTab === 'submissions.json';
   const [isEditing, setIsEditing] = useState(!isReadOnly);
 
   // Re-sync with item if it changes
   useEffect(() => {
-    setFormData(item as Record<string, unknown>);
+    setFormData(normalizeItem(item));
     setIsEditing(!isReadOnly);
-  }, [item, isReadOnly]);
+  }, [item, isReadOnly, activeTab]);
 
-  const entries = Object.entries(formData).filter(([key]) => {
-    if (activeTab === 'notifications.json') {
-      return ['text', 'category', 'date'].includes(key);
-    }
-    return key !== 'id';
-  });
+  // Determine all fields to render
+  const entries = (() => {
+    const currentKeys = Object.keys(formData);
+    const schemaKeys = Object.keys(schemaTemplate);
+    // Combine unique keys while keeping schema fields first
+    const allKeys = Array.from(new Set([...schemaKeys, ...currentKeys]));
+
+    return allKeys
+      .filter((key) => {
+        if (key === 'id') return false;
+        if (activeTab === 'notifications.json') {
+          return ['text', 'category', 'date'].includes(key);
+        }
+        return true;
+      })
+      .map((key) => [key, formData[key] ?? ''] as [string, unknown]);
+  })();
 
   const itemTitle = String(
     formData.paperTitle ||
