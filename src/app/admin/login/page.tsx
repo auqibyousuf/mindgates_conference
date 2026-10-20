@@ -16,7 +16,7 @@ export default function LoginPage() {
     e.preventDefault();
     // Simple password check for demonstration
     // In a real app, this would be an API call
-    if (password === 'admin123') {
+    if (password === 'MindgatesPortal$2026') {
       localStorage.setItem('admin_auth', 'true');
       router.push('/admin');
     } else {
