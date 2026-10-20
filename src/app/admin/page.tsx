@@ -292,16 +292,54 @@ function FileUploadButton({ onUpload, label, disabled = false }: { onUpload: (ur
 }
 
 function FileUploadField({ label, value, onChange, disabled = false }: { label: string, value: string, onChange: (val: string) => void, disabled?: boolean }) {
+  const [isManualUrl, setIsManualUrl] = useState(false);
   const fileName = value ? value.split('/').pop() : "";
   const displayLabel = label.replace(/url/i, '').replace(/([A-Z])/g, ' $1').trim();
 
   return (
-    <div className="space-y-2">
-      <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 ml-1 block">
-        {displayLabel}
-      </label>
-      
-      {value ? (
+    <div className="space-y-3">
+      <div className="flex justify-between items-center pb-1 border-b border-slate-50">
+        <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 ml-1 block">
+          {displayLabel}
+        </label>
+        {!disabled && (
+          <button
+            type="button"
+            onClick={() => setIsManualUrl(!isManualUrl)}
+            className="text-[10px] font-bold text-primary hover:underline cursor-pointer"
+          >
+            {isManualUrl ? "Switch to Upload" : "Enter URL directly"}
+          </button>
+        )}
+      </div>
+
+      {isManualUrl && !disabled ? (
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={value}
+            disabled={disabled}
+            placeholder="Paste image/file URL or path (e.g. /images/..., https://...)"
+            onChange={(e) => onChange(e.target.value)}
+            className={cn(
+              "w-full text-foreground focus:ring-primary/20 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 transition-all border",
+              disabled
+                ? "bg-slate-50 border-slate-200 text-foreground/40 cursor-not-allowed"
+                : "bg-white border-slate-200"
+            )}
+          />
+          {value && (
+            <button
+              type="button"
+              onClick={() => onChange("")}
+              className="p-2.5 text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer shrink-0"
+              title="Clear"
+            >
+              <Trash2 className="size-4" />
+            </button>
+          )}
+        </div>
+      ) : value ? (
         <div className="flex flex-col gap-3 p-4 bg-slate-50 border border-slate-200 rounded-2xl">
           <div className="flex items-center justify-between gap-3">
             <a
@@ -311,17 +349,27 @@ function FileUploadField({ label, value, onChange, disabled = false }: { label: 
               className="flex items-center gap-2.5 text-xs font-bold text-primary hover:underline truncate"
             >
               <FileText className="size-4 shrink-0" />
-              <span className="truncate">{fileName}</span>
+              <span className="truncate">{fileName || value}</span>
             </a>
             {!disabled && (
-              <button
-                type="button"
-                onClick={() => onChange("")}
-                className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                title="Remove File"
-              >
-                <Trash2 className="size-4" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsManualUrl(true)}
+                  className="p-1.5 text-slate-500 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+                  title="Edit URL directly"
+                >
+                  <Edit3 className="size-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onChange("")}
+                  className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                  title="Remove File"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </div>
             )}
           </div>
           
@@ -333,20 +381,30 @@ function FileUploadField({ label, value, onChange, disabled = false }: { label: 
         </div>
       ) : (
         <div className={cn(
-          "flex items-center justify-center p-6 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50",
+          "flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50 gap-2",
           !disabled && "hover:border-primary/30 transition-colors"
         )}>
           {disabled ? (
             <span className="text-xs text-foreground/30 font-medium">No file uploaded</span>
           ) : (
-            <FileUploadButton onUpload={(url) => onChange(url)} label="Upload File" disabled={disabled} />
+            <>
+              <FileUploadButton onUpload={(url) => onChange(url)} label="Upload File" disabled={disabled} />
+              <span className="text-[11px] text-foreground/40 font-medium">or</span>
+              <button
+                type="button"
+                onClick={() => setIsManualUrl(true)}
+                className="text-xs font-bold text-primary hover:underline cursor-pointer"
+              >
+                Enter image URL / link manually
+              </button>
+            </>
           )}
         </div>
       )}
 
       {value && (
         <div className="mt-3 p-3 bg-slate-50 rounded-xl border border-dashed border-slate-200 flex justify-center overflow-hidden">
-          {value.match(/\.(jpg|jpeg|png|gif|webp|svg)/i) || value.includes('image') ? (
+          {value.match(/\.(jpg|jpeg|png|gif|webp|svg)/i) || value.includes('image') || value.startsWith('data:image/') ? (
             <NextImage
               src={value}
               width={400}
@@ -565,7 +623,8 @@ function FieldEditor({
 
   const isLongText = stringValue.length > 100 || label.toLowerCase().includes('message') || label.toLowerCase().includes('description') || label.toLowerCase().includes('bio');
   const isCategoryField = label.toLowerCase() === 'category' || label.toLowerCase() === 'type' || label.toLowerCase() === 'icon' || label.toLowerCase() === 'status';
-  const isDateField = label.toLowerCase().includes('startdate') || label.toLowerCase().includes('enddate') || (label.toLowerCase() === 'date' && !stringValue.includes('-'));
+  const isDateField = label.toLowerCase().includes('startdate') || label.toLowerCase().includes('enddate');
+  const isDisplayDateField = !isDateField && (label.toLowerCase() === 'date' || label.toLowerCase().includes('date'));
 
   const EDITOR_CATEGORIES = ["Governing Council"];
   const NOTIFICATION_CATEGORIES = ["News", "Update", "Deadline", "Alert"];
@@ -618,6 +677,23 @@ function FieldEditor({
               : "bg-white border-slate-200 text-foreground cursor-pointer"
           )}
         />
+      ) : isDisplayDateField ? (
+        <div className="space-y-1">
+          <input
+            type="text"
+            value={stringValue}
+            disabled={disabled}
+            placeholder="e.g. 15 – 17 Oct, 2026 or 2025-11-20"
+            onChange={(e) => onChange(e.target.value)}
+            className={cn(
+              "w-full rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all border",
+              disabled
+                ? "bg-slate-50 border-slate-200 text-foreground/40 cursor-not-allowed"
+                : "bg-white border-slate-200 text-foreground"
+            )}
+          />
+          <p className="text-[10px] text-foreground/40 ml-1">You can enter any date range, past or future dates.</p>
+        </div>
       ) : isCategoryField ? (
         <CustomSelect
           options={optionsList}
@@ -1018,23 +1094,27 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
                  </div>
               </div>
 
-               <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingIndex(i);
-                      }}
-                      className="p-2.5 text-primary hover:bg-primary/10 rounded-xl transition-all hover:scale-110 cursor-pointer bg-primary/5"
-                    >
-                       <Edit3 className="size-4" />
-                    </button>
+               <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300">
+                    {activeTab !== 'submissions.json' && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingIndex(i);
+                        }}
+                        className="p-2.5 text-primary hover:bg-primary/10 rounded-xl transition-all hover:scale-110 cursor-pointer bg-primary/5"
+                        title="Edit Item"
+                      >
+                         <Edit3 className="size-4" />
+                      </button>
+                    )}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         onDelete(i);
                       }}
                       className="p-2.5 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all hover:scale-110 cursor-pointer bg-red-50"
+                      title="Delete Item"
                     >
                        <Trash2 className="size-4" />
                     </button>
@@ -1060,13 +1140,14 @@ function ItemForm({ item, onSave, onCancel, loading, title, activeTab }: {
 }) {
   const [formData, setFormData] = useState<Record<string, unknown>>(item as Record<string, unknown>);
   const isNewItem = title.toLowerCase().includes('add');
-  const [isEditing, setIsEditing] = useState(isNewItem);
+  const isReadOnly = activeTab === 'submissions.json';
+  const [isEditing, setIsEditing] = useState(!isReadOnly);
 
   // Re-sync with item if it changes
   useEffect(() => {
     setFormData(item as Record<string, unknown>);
-    setIsEditing(isNewItem);
-  }, [item, isNewItem]);
+    setIsEditing(!isReadOnly);
+  }, [item, isReadOnly]);
 
   const entries = Object.entries(formData).filter(([key]) => {
     if (activeTab === 'notifications.json') {
