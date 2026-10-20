@@ -622,11 +622,20 @@ function FieldEditor({
   }
 
   const isLongText = stringValue.length > 100 || label.toLowerCase().includes('message') || label.toLowerCase().includes('description') || label.toLowerCase().includes('bio');
-  const isCategoryField = label.toLowerCase() === 'category' || label.toLowerCase() === 'type' || label.toLowerCase() === 'icon' || label.toLowerCase() === 'status';
+  const isCategoryField = label.toLowerCase() === 'category' || label.toLowerCase() === 'type' || label.toLowerCase() === 'icon' || label.toLowerCase() === 'status' || (label.toLowerCase() === 'role' && activeTab === 'editors.json');
   const isDateField = label.toLowerCase().includes('startdate') || label.toLowerCase().includes('enddate');
   const isDisplayDateField = !isDateField && (label.toLowerCase() === 'date' || label.toLowerCase().includes('date'));
 
-  const EDITOR_CATEGORIES = ["Governing Council"];
+  const EDITOR_CATEGORIES = ["Governing Council", "Advisory Board", "Executive Editorial Board", "Associate Editors", "Reviewers"];
+  const EDITOR_ROLES = [
+    "Director & Chief Editor",
+    "Executive Associate Editor",
+    "Global Advisory Head",
+    "Governing Council Member",
+    "Senior Editor",
+    "Associate Editor",
+    "Reviewer"
+  ];
   const NOTIFICATION_CATEGORIES = ["News", "Update", "Deadline", "Alert"];
   const CONF_TYPES = ["International", "National"];
   const CONF_STATUS = ["Upcoming", "Ongoing", "Past"];
@@ -634,7 +643,9 @@ function FieldEditor({
 
   const optionsList = (() => {
     let list: string[] = [];
-    if (label.toLowerCase() === 'category') {
+    if (label.toLowerCase() === 'role' && activeTab === 'editors.json') {
+      list = EDITOR_ROLES;
+    } else if (label.toLowerCase() === 'category') {
       list = activeTab === 'editors.json' ? EDITOR_CATEGORIES : NOTIFICATION_CATEGORIES;
     } else if (label.toLowerCase() === 'type') {
       list = CONF_TYPES;
@@ -745,11 +756,11 @@ function FieldEditor({
 
 function ObjectEditor({ data, onSave, loading }: { data: Record<string, unknown>, onSave: (d: unknown) => void, loading: boolean }) {
   const [formData, setFormData] = useState<Record<string, unknown>>(data);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
 
   useEffect(() => {
     setFormData(data);
-    setIsEditing(false);
+    setIsEditing(true);
   }, [data]);
 
   return (
@@ -772,7 +783,6 @@ function ObjectEditor({ data, onSave, loading }: { data: Record<string, unknown>
                 type="button"
                 onClick={async () => {
                   await onSave(formData);
-                  setIsEditing(false);
                 }}
                 disabled={loading}
                 className="flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest text-[11px] hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 cursor-pointer"
@@ -784,11 +794,10 @@ function ObjectEditor({ data, onSave, loading }: { data: Record<string, unknown>
                 type="button"
                 onClick={() => {
                   setFormData(data);
-                  setIsEditing(false);
                 }}
                 className="px-8 py-3 rounded-xl font-black uppercase tracking-widest text-[11px] border border-slate-200 text-foreground/60 hover:bg-slate-50 transition-all cursor-pointer"
               >
-                Cancel
+                Reset
               </button>
             </>
           ) : (
@@ -808,11 +817,11 @@ function ObjectEditor({ data, onSave, loading }: { data: Record<string, unknown>
 
 function StatsEditor({ data, onSave, loading }: { data: { heroStats: Record<string, string>[], globalStats: Record<string, string>[] }, onSave: (d: unknown) => void, loading: boolean }) {
   const [formData, setFormData] = useState(data || { heroStats: [], globalStats: [] });
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
 
   useEffect(() => {
     setFormData(data || { heroStats: [], globalStats: [] });
-    setIsEditing(false);
+    setIsEditing(true);
   }, [data]);
 
   const handleChange = (section: 'heroStats' | 'globalStats', index: number, field: string, value: string) => {
@@ -898,7 +907,6 @@ function StatsEditor({ data, onSave, loading }: { data: { heroStats: Record<stri
               type="button"
               onClick={async () => {
                 await onSave(formData);
-                setIsEditing(false);
               }}
               disabled={loading}
               className="flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest text-[11px] hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 cursor-pointer"
@@ -910,11 +918,10 @@ function StatsEditor({ data, onSave, loading }: { data: { heroStats: Record<stri
               type="button"
               onClick={() => {
                 setFormData(data || { heroStats: [], globalStats: [] });
-                setIsEditing(false);
               }}
               className="px-8 py-3 rounded-xl font-black uppercase tracking-widest text-[11px] border border-slate-200 text-foreground/60 hover:bg-slate-50 transition-all cursor-pointer"
             >
-              Cancel
+              Reset
             </button>
           </>
         ) : (
@@ -1060,6 +1067,36 @@ function ArrayEditor({ data, onSave, onDelete, onAdd, loading, editingIndex, set
 
   if (editingIndex !== null) {
     return <ItemForm item={data[editingIndex]} onSave={(updatedItem: unknown) => onSave(editingIndex, updatedItem)} onCancel={() => setEditingIndex(null)} loading={loading} title="Edit Item" activeTab={activeTab} />;
+  }
+
+  if (data.length === 0) {
+    const isSubmissions = activeTab === 'submissions.json';
+    return (
+      <div className="flex flex-col items-center justify-center p-12 sm:p-16 bg-white border border-dashed border-slate-200 rounded-3xl text-center space-y-4">
+        <div className="size-16 rounded-2xl bg-slate-50 flex items-center justify-center text-foreground/30">
+          <FileText className="size-8" />
+        </div>
+        <div className="space-y-1">
+          <h3 className="font-serif font-bold text-lg text-foreground">
+            {isSubmissions ? "No Submitted Papers Yet" : "No Items Found"}
+          </h3>
+          <p className="text-xs text-foreground/45 max-w-sm">
+            {isSubmissions
+              ? "When researchers submit paper manuscripts through the registration portal, they will appear here automatically."
+              : "There are currently no items in this list. Click 'Add New Item' above to create one."}
+          </p>
+        </div>
+        {!isSubmissions && (
+          <button
+            onClick={() => setNewMode(true)}
+            className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-primary/90 transition-all shadow-md shadow-primary/10 cursor-pointer mt-2"
+          >
+            <Plus className="size-3.5" />
+            Add First Item
+          </button>
+        )}
+      </div>
+    );
   }
 
   return (

@@ -3,9 +3,9 @@
 import React, { useState } from "react"
 import { Calendar, Search, MapPin, FileText, Download } from "lucide-react"
 import { DataTable, Column } from "@/components/DataTable"
-import { Conference } from "@/lib/types"
+import { Conference, SiteConfig } from "@/lib/types"
 import { SubPageHero } from "@/components/SubPageHero"
-import siteConfig from "@/data/siteConfig.json"
+import siteConfigDefault from "@/data/siteConfig.json"
 
 import { Button } from "@/components/ui/Button"
 
@@ -13,8 +13,10 @@ type ConferenceStatus = "All" | "Upcoming" | "Past"
 
 export default function ConferencesClient({
   conferences,
+  siteConfig = siteConfigDefault as SiteConfig,
 }: {
   conferences: Conference[]
+  siteConfig?: SiteConfig
 }) {
   const [activeTab, setActiveTab] = useState<ConferenceStatus>("Upcoming")
   const [searchQuery, setSearchQuery] = useState("")

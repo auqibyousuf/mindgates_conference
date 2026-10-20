@@ -1,12 +1,21 @@
 import React from 'react'
 import Image from 'next/image'
 import { Target, Users, ShieldCheck } from 'lucide-react'
-import siteConfig from '@/data/siteConfig.json'
+import siteConfigDefault from '@/data/siteConfig.json'
+import editorsDefault from '@/data/editors.json'
 import { GlassContainer } from '@/components/GlassContainer'
+import { SubPageHero } from '@/components/SubPageHero'
+import { readData } from '@/lib/data-handler'
+import { SiteConfig, Editor } from '@/lib/types'
 
-import { SubPageHero } from '@/components/SubPageHero';
+export const dynamic = 'force-dynamic'
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const siteConfig = ((await readData('siteConfig.json')) as SiteConfig) || siteConfigDefault
+  const editors = ((await readData('editors.json')) as Editor[]) || (editorsDefault as Editor[])
+  const chief = editors.find((e) => e.category === 'Governing Council' && e.role.includes('Director')) || editors[0]
+  const directorImage = chief?.image || siteConfig.hero.aboutImage || '/images/banners/hero-v2.png'
+
   return (
     <main className='min-h-screen bg-background overflow-hidden'>
       <SubPageHero 
@@ -79,19 +88,18 @@ export default function AboutPage() {
                 <div className='space-y-4 text-center lg:text-left max-w-sm mx-auto lg:max-w-none w-full'>
                   <div className='aspect-4/5 rounded-3xl overflow-hidden shadow-xl border-4 border-white mb-4 relative w-full'>
                     <Image
-                      src='/images/banners/hero-v2.png'
-                      alt='Dr Naseer Ganiee'
-                      width={400}
-                      height={500}
+                      src={directorImage}
+                      alt={chief?.name || 'Dr Naseer Ganiee'}
+                      fill
                       className='object-cover w-full h-full'
                     />
                   </div>
                   <div>
                     <p className='font-bold text-lg sm:text-xl font-serif text-primary'>
-                      Dr Naseer Ganiee
+                      {chief?.name || 'Dr Naseer Ganiee'}
                     </p>
                     <p className='text-[8px] sm:text-[9px] uppercase font-black tracking-widest text-foreground/40 mt-0.5'>
-                      Director & Chief Editor
+                      {chief?.role || 'Director & Chief Editor'}
                     </p>
                   </div>
                 </div>

@@ -1,14 +1,17 @@
 import { DataTable, Column } from "@/components/DataTable"
 import Image from "next/image"
 import { readData } from "@/lib/data-handler"
-import { Book } from "@/lib/types"
+import { Book, SiteConfig } from "@/lib/types"
 import { SubPageHero } from "@/components/SubPageHero"
-import siteConfig from "@/data/siteConfig.json"
+import siteConfigDefault from "@/data/siteConfig.json"
 import { BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 
+export const dynamic = 'force-dynamic'
+
 export default async function BooksPage() {
   const books = ((await readData("books.json")) as Book[]) || []
+  const siteConfig = ((await readData("siteConfig.json")) as SiteConfig) || siteConfigDefault
 
   const columns: Column<Book>[] = [
     {
@@ -67,7 +70,7 @@ export default async function BooksPage() {
         description='Explore our curated collection of scholarly publications, research series, and academic monographs from leading researchers worldwide.'
         badge='Academic Gallery'
         icon={BookOpen}
-        image={siteConfig.hero.booksImage}
+        image={siteConfig.hero.booksImage || siteConfigDefault.hero.booksImage}
       />
 
       {/* Table Section */}

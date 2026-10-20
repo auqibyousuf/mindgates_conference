@@ -4,9 +4,15 @@ import { Camera, Maximize2 } from 'lucide-react';
 import { GlassContainer } from '@/components/GlassContainer';
 
 import { SubPageHero } from '@/components/SubPageHero';
-import siteConfig from '@/data/siteConfig.json';
+import siteConfigDefault from '@/data/siteConfig.json';
+import { readData } from '@/lib/data-handler';
+import { SiteConfig } from '@/lib/types';
 
-export default function GalleryPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function GalleryPage() {
+  const siteConfig = ((await readData('siteConfig.json')) as SiteConfig) || siteConfigDefault;
+
   const images = [
     { src: "/images/gallery/gallery-1.png", title: "Global Academic Forum 2024", category: "Conference" },
     { src: "/images/gallery/gallery-2.png", title: "Scholarly Networking Event", category: "Networking" },
@@ -24,7 +30,7 @@ export default function GalleryPage() {
         description="Explore the highlights from our past conferences, workshops, and academic gatherings."
         badge="Visual Legacy"
         icon={Camera}
-        image={siteConfig.hero.galleryImage}
+        image={siteConfig.hero.galleryImage || siteConfigDefault.hero.galleryImage}
       />
 
       <div className="section-container py-4 sm:py-8 md:py-12 lg:py-16">

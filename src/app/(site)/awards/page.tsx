@@ -1,12 +1,15 @@
 import { Trophy, Calendar, MapPin, Medal } from "lucide-react"
 import { DataTable, Column } from "@/components/DataTable"
 import { readData } from "@/lib/data-handler"
-import { Award } from "@/lib/types"
+import { Award, SiteConfig } from "@/lib/types"
 import { SubPageHero } from "@/components/SubPageHero"
-import siteConfig from "@/data/siteConfig.json"
+import siteConfigDefault from "@/data/siteConfig.json"
+
+export const dynamic = 'force-dynamic'
 
 export default async function AwardsPage() {
   const awards = ((await readData("awards.json")) as Award[]) || []
+  const siteConfig = ((await readData("siteConfig.json")) as SiteConfig) || siteConfigDefault
 
   const columns: Column<Award>[] = [
     {

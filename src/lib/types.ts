@@ -9,6 +9,12 @@ export interface SiteConfig {
     titleLine2: string;
     description: string;
     image: string;
+    aboutImage?: string;
+    editorsImage?: string;
+    conferencesImage?: string;
+    awardsImage?: string;
+    booksImage?: string;
+    galleryImage?: string;
     primaryButton: { label: string; link: string };
     secondaryButton: { label: string; link: string };
   };

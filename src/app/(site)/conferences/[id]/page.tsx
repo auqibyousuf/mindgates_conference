@@ -13,9 +13,12 @@ import {
   HelpCircle,
 } from "lucide-react"
 import { readData } from "@/lib/data-handler"
-import { Conference } from "@/lib/types"
+import { Conference, SiteConfig } from "@/lib/types"
+import siteConfigDefault from "@/data/siteConfig.json"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/Button"
+
+export const dynamic = 'force-dynamic'
 
 export default async function ConferenceDetailPage({
   params,
@@ -24,7 +27,8 @@ export default async function ConferenceDetailPage({
 }) {
   const { id } = await params
   const conferences =
-    ((await readData("conferences.json")) as Conference[]) || []
+    ((await readData("conferences.json")) as (Conference & { image?: string })[]) || []
+  const siteConfig = ((await readData("siteConfig.json")) as SiteConfig) || siteConfigDefault
   const conference = conferences.find((c) => c.id === id)
 
   if (!conference) {
@@ -78,7 +82,7 @@ export default async function ConferenceDetailPage({
             {/* Banner/Image */}
             <div className='aspect-video relative rounded-3xl overflow-hidden glass-card border-foreground/5 shadow-2xl'>
               <Image
-                src='/images/banners/main-hero.png'
+                src={conference.image || siteConfig.hero.conferencesImage || '/images/banners/main-hero.png'}
                 alt={conference.title}
                 fill
                 className='object-cover'

@@ -12,13 +12,16 @@ import {
 import { Button } from "@/components/ui/Button"
 import { GlassContainer } from "@/components/GlassContainer"
 import { readData } from "@/lib/data-handler"
-import { Editor } from "@/lib/types"
+import { Editor, SiteConfig } from "@/lib/types"
 
 import { SubPageHero } from "@/components/SubPageHero"
-import siteConfig from "@/data/siteConfig.json"
+import siteConfigDefault from "@/data/siteConfig.json"
+
+export const dynamic = 'force-dynamic'
 
 export default async function EditorsPage() {
   const editors = ((await readData("editors.json")) as Editor[]) || []
+  const siteConfig = ((await readData("siteConfig.json")) as SiteConfig) || siteConfigDefault
 
   return (
     <main className='min-h-screen bg-background relative overflow-hidden'>
@@ -28,7 +31,7 @@ export default async function EditorsPage() {
         description='Meet the distinguished scholars and industry pioneers shaping the future of international research and innovation.'
         badge='Global Academic Leadership'
         icon={Users}
-        image={siteConfig.hero.editorsImage}
+        image={siteConfig.hero.editorsImage || siteConfigDefault.hero.editorsImage}
       />
 
       <div className='section-container relative z-10 py-4 sm:py-8 md:py-12 lg:py-16'>
