@@ -46,12 +46,20 @@ export default function ConferencesClient({
     },
     {
       header: "Date",
-      accessor: (conf) => (
-        <div className='flex items-center gap-2'>
-          <Calendar className='size-4 text-primary/40' />
-          <span>{conf.date}</span>
-        </div>
-      ),
+      accessor: (conf) => {
+        let displayDate = conf.date;
+        if (!displayDate && conf.startDate) {
+          displayDate = conf.endDate && conf.endDate !== conf.startDate
+            ? `${conf.startDate} – ${conf.endDate}`
+            : conf.startDate;
+        }
+        return (
+          <div className='flex items-center gap-2'>
+            <Calendar className='size-4 text-primary/40' />
+            <span>{displayDate || "TBA"}</span>
+          </div>
+        );
+      },
     },
     {
       header: "Venue",
@@ -66,33 +74,56 @@ export default function ConferencesClient({
       header: "Actions",
       accessor: (conf) => {
         const now = new Date()
-        const end = new Date(conf.endDate || conf.date)
-        end.setHours(23, 59, 59, 999)
-        const isPast = now > end
+        let isPastDate = false
+        if (conf.endDate || conf.date) {
+          const end = new Date(conf.endDate || conf.date)
+          if (!isNaN(end.getTime())) {
+            end.setHours(23, 59, 59, 999)
+            isPastDate = now > end
+          }
+        }
+        const isPast = conf.status === "Past" || isPastDate
 
-        const url = isPast ? conf.proceedingsUrl : conf.brochureUrl
-        const label = isPast ? "Download Proceedings" : "View Brochure"
+        const hasBrochure = conf.brochureUrl && conf.brochureUrl !== "#"
+        const hasProceedings = conf.proceedingsUrl && conf.proceedingsUrl !== "#"
 
-        return url && url !== "#" ? (
-          <Button
-            href={url}
-            target='_blank'
-            rel='noopener noreferrer'
-            variant='primary-glass'
-            size='sm'
-            className='gap-2 text-xs py-2 px-4'
-          >
-            {isPast ? (
-              <Download className='size-3.5' />
-            ) : (
-              <FileText className='size-3.5' />
+        if (!hasBrochure && !hasProceedings) {
+          return (
+            <span className='text-foreground/20 italic text-xs'>
+              {isPast ? "No Proceedings" : "Brochure Pending"}
+            </span>
+          )
+        }
+
+        return (
+          <div className="flex items-center justify-end gap-2 flex-wrap">
+            {hasBrochure && (
+              <Button
+                href={conf.brochureUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                variant={isPast ? 'glass' : 'primary-glass'}
+                size='sm'
+                className='gap-1.5 text-xs py-1.5 px-3'
+              >
+                <FileText className='size-3.5' />
+                Brochure
+              </Button>
             )}
-            {label}
-          </Button>
-        ) : (
-          <span className='text-foreground/20 italic text-xs'>
-            {isPast ? "No Proceedings" : "Brochure Pending"}
-          </span>
+            {hasProceedings && (
+              <Button
+                href={conf.proceedingsUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                variant='primary-glass'
+                size='sm'
+                className='gap-1.5 text-xs py-1.5 px-3'
+              >
+                <Download className='size-3.5' />
+                Proceedings
+              </Button>
+            )}
+          </div>
         )
       },
       className: "text-right",
