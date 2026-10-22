@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
 import { FadeIn } from '@/components/ui/FadeIn'
 import { readData } from '@/lib/data-handler'
-import { SiteConfig, Conference, Award } from '@/lib/types'
+import { SiteConfig, Conference, Award, Editor, Book } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -17,6 +17,8 @@ export default async function Home() {
   const conferences =
     ((await readData('conferences.json')) as Conference[]) || []
   const awards = ((await readData('awards.json')) as Award[]) || []
+  const editors = ((await readData('editors.json')) as Editor[]) || []
+  const books = ((await readData('books.json')) as Book[]) || []
   const notificationsData =
     ((await readData('notifications.json')) as { text: string }[]) || []
   const statsData = ((await readData('stats.json')) as {
@@ -24,6 +26,10 @@ export default async function Home() {
     globalStats: Record<string, string>[]
   }) || { heroStats: [], globalStats: [] }
   const notifications = notificationsData.map((n) => n.text)
+
+  const chief = editors.find((e) => e.category === 'Governing Council' && e.role.includes('Director')) || editors[0]
+  const directorImage = chief?.image || siteConfig?.hero?.aboutImage || '/images/banners/hero-v2.png'
+  const featuredBook = books[0]
 
   if (!siteConfig) return null
 
@@ -155,10 +161,10 @@ export default async function Home() {
           <div className='relative max-w-md mx-auto lg:max-w-none w-full'>
             <div className='aspect-4/5 rounded-3xl sm:rounded-4xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] relative z-10 border-4 sm:border-8 border-white'>
               <Image
-                src='/images/banners/hero-v2.png' // Using hero as placeholder until director photo is provided
-                alt='Director'
+                src={directorImage}
+                alt={chief?.name || 'Director'}
                 fill
-                className='object-cover brightness-90 grayscale-[0.2] hover:grayscale-0 transition-all duration-700'
+                className='object-cover brightness-95 hover:brightness-100 transition-all duration-700'
               />
             </div>
             <div className='absolute -bottom-4 -right-2 sm:-bottom-6 sm:-right-6 w-56 sm:w-72 max-w-[85vw] glass-card p-4 sm:p-6 z-20 border-primary/20 shadow-2xl'>
@@ -168,10 +174,10 @@ export default async function Home() {
               </p>
               <div>
                 <p className='font-bold text-base sm:text-lg text-primary font-serif'>
-                  Dr Naseer Ganiee
+                  {chief?.name || 'Dr Naseer Ganiee'}
                 </p>
                 <p className='text-[8px] sm:text-[9px] uppercase font-black text-foreground/40 tracking-[0.2em] mt-0.5'>
-                  Chief Editor & Director
+                  {chief?.role || 'Chief Editor & Director'}
                 </p>
               </div>
             </div>
@@ -327,8 +333,8 @@ export default async function Home() {
             <div className='relative order-1 lg:order-2 flex justify-center'>
               <div className='relative w-full max-w-[280px] sm:max-w-xs md:max-w-md aspect-3/4 group'>
                 <Image
-                  src='/images/books/book1.png'
-                  alt='Featured Book'
+                  src={featuredBook?.image || '/images/books/book1.png'}
+                  alt={featuredBook?.title || 'Featured Book'}
                   fill
                   className='object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transition-all duration-700 group-hover:scale-105 group-hover:-rotate-2'
                 />
