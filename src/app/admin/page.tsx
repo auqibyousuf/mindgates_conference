@@ -105,7 +105,10 @@ export default function AdminPage() {
     setLoading(true);
     setStatus(null);
     try {
-      const response = await fetch(`/api/save-json?filename=${activeTab}`);
+      const response = await fetch(`/api/save-json?filename=${activeTab}&t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
       if (response.ok) {
         const jsonData = await response.json();
         setData(jsonData);
