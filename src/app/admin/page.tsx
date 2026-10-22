@@ -5,7 +5,7 @@ import {
   Save, RefreshCw, FileText, Settings, CheckCircle2,
   AlertCircle, AlertTriangle, Plus, Trash2, Edit3, ChevronRight, X, Bell,
   Calendar, Award, Users, BarChart, User, Mail, Phone,
-  Building2, MapPin
+  Building2, MapPin, Download
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { GlassContainer } from '@/components/GlassContainer';
@@ -269,15 +269,27 @@ export default function AdminPage() {
                     <h2 className="text-xl font-sans font-bold tracking-tight text-foreground">{currentFile?.label}</h2>
                     <p className="text-xs text-foreground/40">Editing <span className="text-primary font-medium">{activeTab}</span></p>
                  </div>
-                 {currentFile?.type === 'array' && activeTab !== 'submissions.json' && editingItemIndex === null && !newItemMode && (
+                 <div className="flex items-center gap-2">
                    <button
-                     onClick={() => setNewItemMode(true)}
-                     className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-primary/90 transition-all shadow-md shadow-primary/10 cursor-pointer"
+                     type="button"
+                     onClick={() => fetchContent()}
+                     disabled={loading}
+                     title="Sync live database"
+                     className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-foreground/70 font-bold text-xs transition-colors cursor-pointer disabled:opacity-50"
                    >
-                      <Plus className="size-3.5" />
-                      Add
+                     <RefreshCw className={cn("size-3.5 text-primary", loading && "animate-spin")} />
+                     <span>Sync</span>
                    </button>
-                 )}
+                   {currentFile?.type === 'array' && activeTab !== 'submissions.json' && editingItemIndex === null && !newItemMode && (
+                     <button
+                       onClick={() => setNewItemMode(true)}
+                       className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-primary/90 transition-all shadow-md shadow-primary/10 cursor-pointer"
+                     >
+                        <Plus className="size-3.5" />
+                        Add
+                     </button>
+                   )}
+                 </div>
               </div>
 
               {status && (
@@ -1131,8 +1143,14 @@ function ArrayEditor({
     const items: { icon: React.ElementType; text: string }[] = [];
 
     if (activeTab === 'conferences.json') {
-      if (it.date) items.push({ icon: Calendar, text: String(it.date) });
+      let displayDate = it.date;
+      if (!displayDate && it.startDate) {
+        displayDate = it.endDate && it.endDate !== it.startDate ? `${it.startDate} – ${it.endDate}` : String(it.startDate);
+      }
+      if (displayDate) items.push({ icon: Calendar, text: String(displayDate) });
       if (it.venue) items.push({ icon: MapPin, text: String(it.venue) });
+      if (it.brochureUrl) items.push({ icon: FileText, text: 'Brochure Attached' });
+      if (it.proceedingsUrl) items.push({ icon: Download, text: 'Proceedings Attached' });
     } else if (activeTab === 'books.json') {
       if (it.author) items.push({ icon: User, text: String(it.author) });
       if (it.isbn) items.push({ icon: FileText, text: `ISBN: ${String(it.isbn)}` });
