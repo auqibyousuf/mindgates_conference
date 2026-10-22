@@ -431,9 +431,9 @@ function FileUploadField({ label, value, onChange, disabled = false }: { label: 
         <div className="flex flex-col gap-3 p-4 bg-slate-50 border border-slate-200 rounded-2xl">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              {/* Image Thumbnail Preview */}
-              {(value.startsWith('http') || value.startsWith('/') || value.startsWith('data:image')) && (
-                <div className="size-12 rounded-xl overflow-hidden border border-slate-200 bg-white shrink-0 relative flex items-center justify-center">
+              {/* Image Thumbnail Preview vs Document Badge */}
+              {/\.(png|jpe?g|webp|gif|svg)(\?.*)?$/i.test(value) || value.startsWith('data:image') ? (
+                <div className="size-12 rounded-xl overflow-hidden border border-slate-200 bg-white shrink-0 relative flex items-center justify-center shadow-xs">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={value}
@@ -444,16 +444,26 @@ function FileUploadField({ label, value, onChange, disabled = false }: { label: 
                     }}
                   />
                 </div>
+              ) : (
+                <div className="size-12 rounded-xl bg-red-50 border border-red-200 text-red-600 flex flex-col items-center justify-center shrink-0 shadow-xs">
+                  <FileText className="size-5" />
+                  <span className="text-[9px] font-black tracking-tighter uppercase mt-0.5">
+                    {value.toLowerCase().endsWith('.pdf') ? 'PDF' : 'DOC'}
+                  </span>
+                </div>
               )}
-              <a
-                href={value}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-xs font-bold text-primary hover:underline truncate"
-              >
-                <FileText className="size-4 shrink-0" />
-                <span className="truncate">{fileName || value}</span>
-              </a>
+              <div className="min-w-0 flex flex-col">
+                <a
+                  href={value}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 text-xs font-bold text-primary hover:underline truncate"
+                  title={value}
+                >
+                  <span className="truncate">{fileName || value}</span>
+                </a>
+                <span className="text-[10px] text-foreground/40 font-mono truncate">{value}</span>
+              </div>
             </div>
             {!disabled && (
               <div className="flex items-center gap-2">
