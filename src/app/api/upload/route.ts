@@ -31,9 +31,10 @@ export async function POST(request: Request) {
     const cleanFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
     const fileId = `${Date.now()}-${cleanFileName}`;
 
-    // 1. If on Cloudflare with KV namespace, save file in KV
+    // 1. Check if running on Cloudflare OpenNext runtime
     await initCloudflare();
     let savedInKV = false;
+    
     if (getKV) {
       try {
         const ctx = getKV();
@@ -49,13 +50,15 @@ export async function POST(request: Request) {
           // KV key format: "file:<fileId>"
           await kv.put(`file:${fileId}`, payload);
           savedInKV = true;
+        } else {
+          console.warn('MINDGATES_DATA KV binding not available in context');
         }
       } catch (kvErr) {
-        console.warn('Could not save file to KV:', kvErr);
+        console.error('Could not save file to Cloudflare KV:', kvErr);
       }
     }
 
-    // 2. Try writing to local filesystem (development/Node environment)
+    // 2. Try writing to local filesystem (development/Node environment only)
     let savedInFs = false;
     try {
       const fs = await import('fs');
@@ -68,19 +71,17 @@ export async function POST(request: Request) {
       fs.writeFileSync(filePath, buffer);
       savedInFs = true;
     } catch {
-      // Ignored if read-only filesystem (Cloudflare worker edge)
+      // Expected in read-only edge runtimes (Cloudflare Worker)
     }
 
-    // 3. Determine the public URL
-    // If saved to KV, it can be served via /api/upload/file/[fileId]
-    // If saved to FS, it can also be accessed via /uploads/[fileId]
+    // 3. Determine public URL
     let publicUrl = '';
-    if (savedInFs && !savedInKV) {
-      publicUrl = `/uploads/${fileId}`;
-    } else if (savedInKV) {
+    if (savedInKV) {
       publicUrl = `/api/upload/file/${fileId}`;
+    } else if (savedInFs) {
+      publicUrl = `/uploads/${fileId}`;
     } else {
-      // Fallback: If neither KV nor FS is available, or for inline small images, use base64 data URI
+      // Safe fallback if KV binding was somehow unavailable: base64 Data URL (works anywhere)
       publicUrl = `data:${mimeType};base64,${buffer.toString('base64')}`;
     }
     

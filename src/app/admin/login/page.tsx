@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Lock, ChevronRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import siteConfig from '@/data/siteConfig.json';
 import Logo from '@/components/ui/Logo';
 import { Button } from '@/components/ui/Button';
 

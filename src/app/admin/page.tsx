@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useId } from 'react';
 import {
   Save, RefreshCw, FileText, Settings, CheckCircle2,
   AlertCircle, AlertTriangle, Plus, Trash2, Edit3, ChevronRight, X, Bell,
@@ -352,7 +352,7 @@ function FileUploadButton({ onUpload, label, disabled = false }: { onUpload: (ur
     }
   };
 
-  const id = `file-upload-${Math.random().toString(36).substring(2, 9)}`;
+  const id = useId();
 
   return (
     <div className="relative">
@@ -430,15 +430,31 @@ function FileUploadField({ label, value, onChange, disabled = false }: { label: 
       ) : value ? (
         <div className="flex flex-col gap-3 p-4 bg-slate-50 border border-slate-200 rounded-2xl">
           <div className="flex items-center justify-between gap-3">
-            <a
-              href={value}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2.5 text-xs font-bold text-primary hover:underline truncate"
-            >
-              <FileText className="size-4 shrink-0" />
-              <span className="truncate">{fileName || value}</span>
-            </a>
+            <div className="flex items-center gap-3 min-w-0">
+              {/* Image Thumbnail Preview */}
+              {(value.startsWith('http') || value.startsWith('/') || value.startsWith('data:image')) && (
+                <div className="size-12 rounded-xl overflow-hidden border border-slate-200 bg-white shrink-0 relative flex items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={value}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
+              <a
+                href={value}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 text-xs font-bold text-primary hover:underline truncate"
+              >
+                <FileText className="size-4 shrink-0" />
+                <span className="truncate">{fileName || value}</span>
+              </a>
+            </div>
             {!disabled && (
               <div className="flex items-center gap-2">
                 <button
@@ -847,11 +863,6 @@ function ObjectEditor({ data, onSave, loading }: { data: Record<string, unknown>
   const [formData, setFormData] = useState<Record<string, unknown>>(data);
   const [isEditing, setIsEditing] = useState(true);
 
-  useEffect(() => {
-    setFormData(data);
-    setIsEditing(true);
-  }, [data]);
-
   return (
     <GlassContainer variant="light" className="p-8 md:p-10 border-none shadow-xl bg-white space-y-8 w-full">
         <div className="grid grid-cols-1 gap-y-8">
@@ -907,11 +918,6 @@ function ObjectEditor({ data, onSave, loading }: { data: Record<string, unknown>
 function StatsEditor({ data, onSave, loading }: { data: { heroStats: Record<string, string>[], globalStats: Record<string, string>[] }, onSave: (d: unknown) => void, loading: boolean }) {
   const [formData, setFormData] = useState(data || { heroStats: [], globalStats: [] });
   const [isEditing, setIsEditing] = useState(true);
-
-  useEffect(() => {
-    setFormData(data || { heroStats: [], globalStats: [] });
-    setIsEditing(true);
-  }, [data]);
 
   const handleChange = (section: 'heroStats' | 'globalStats', index: number, field: string, value: string) => {
     const newSection = [...(formData[section] || [])];
@@ -1164,6 +1170,7 @@ function ArrayEditor({
 
     return (
       <ItemForm
+        key={`new-${activeTab}`}
         item={emptyItem}
         onSave={(item: unknown) => {
           const itemWithId = {
@@ -1187,9 +1194,11 @@ function ArrayEditor({
     const itemData = (typeof rawItem === 'object' && rawItem !== null)
       ? { ...schemaTemplate, ...(rawItem as Record<string, unknown>) }
       : { ...schemaTemplate };
+    const itemId = (rawItem as Record<string, unknown>)?.id || editingIndex;
 
     return (
       <ItemForm
+        key={`edit-${activeTab}-${itemId}-${viewOnly}`}
         item={itemData}
         onSave={(updatedItem: unknown) => onSave(editingIndex, updatedItem)}
         onCancel={() => {
@@ -1343,12 +1352,6 @@ function ItemForm({
   const isNewItem = title.toLowerCase().includes('add');
   const isReadOnly = activeTab === 'submissions.json';
   const [isEditing, setIsEditing] = useState(initialEditing !== undefined ? initialEditing : !isReadOnly);
-
-  // Re-sync with item if it changes
-  useEffect(() => {
-    setFormData(normalizeItem(item));
-    setIsEditing(initialEditing !== undefined ? initialEditing : !isReadOnly);
-  }, [item, isReadOnly, activeTab, initialEditing]);
 
   // Determine all fields to render
   const entries = (() => {
