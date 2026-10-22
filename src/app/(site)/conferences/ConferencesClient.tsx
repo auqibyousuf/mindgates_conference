@@ -102,9 +102,9 @@ export default function ConferencesClient({
                 href={conf.brochureUrl}
                 target='_blank'
                 rel='noopener noreferrer'
-                variant={isPast ? 'glass' : 'primary-glass'}
+                variant='outline'
                 size='sm'
-                className='gap-1.5 text-xs py-1.5 px-3'
+                className='gap-1.5 text-xs py-1.5 px-3 border-slate-200 hover:border-primary/40 bg-slate-50/80 hover:bg-primary/5 text-foreground/70 hover:text-primary shadow-none'
               >
                 <FileText className='size-3.5' />
                 Brochure
