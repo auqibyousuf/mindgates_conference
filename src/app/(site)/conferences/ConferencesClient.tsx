@@ -87,42 +87,51 @@ export default function ConferencesClient({
         const hasBrochure = conf.brochureUrl && conf.brochureUrl !== "#"
         const hasProceedings = conf.proceedingsUrl && conf.proceedingsUrl !== "#"
 
-        if (!hasBrochure && !hasProceedings) {
-          return (
-            <span className='text-foreground/20 italic text-xs'>
-              {isPast ? "No Proceedings" : "Brochure Pending"}
-            </span>
-          )
-        }
-
         return (
           <div className="flex items-center justify-end gap-2 flex-wrap">
-            {hasBrochure && (
+            {hasBrochure ? (
               <Button
                 href={conf.brochureUrl}
                 target='_blank'
                 rel='noopener noreferrer'
                 variant='outline'
                 size='sm'
-                className='gap-1.5 text-xs py-1.5 px-3 border-slate-200 hover:border-primary/40 bg-slate-50/80 hover:bg-primary/5 text-foreground/70 hover:text-primary shadow-none'
+                className='gap-1.5 text-xs py-1.5 px-3 border-slate-200 hover:border-primary/40 bg-slate-50/80 hover:bg-primary/5 text-foreground/80 hover:text-primary shadow-none'
               >
-                <FileText className='size-3.5' />
-                Brochure
+                <FileText className='size-3.5 text-primary' />
+                <span>Brochure</span>
               </Button>
+            ) : (
+              <span
+                title="Brochure Pending"
+                className='inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100/60 text-slate-400 text-xs font-medium border border-dashed border-slate-200'
+              >
+                <FileText className='size-3 text-slate-300' />
+                <span className='text-[11px]'>Brochure Pending</span>
+              </span>
             )}
-            {hasProceedings && (
+
+            {hasProceedings ? (
               <Button
                 href={conf.proceedingsUrl}
                 target='_blank'
                 rel='noopener noreferrer'
-                variant='primary-glass'
+                variant='primary'
                 size='sm'
-                className='gap-1.5 text-xs py-1.5 px-3'
+                className='gap-1.5 text-xs py-1.5 px-3 shadow-sm shadow-primary/20 bg-primary text-white hover:bg-primary/90'
               >
                 <Download className='size-3.5' />
-                Proceedings
+                <span>Proceedings</span>
               </Button>
-            )}
+            ) : isPast ? (
+              <span
+                title="No Proceedings Available"
+                className='inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100/60 text-slate-400 text-xs font-medium border border-dashed border-slate-200'
+              >
+                <Download className='size-3 text-slate-300' />
+                <span className='text-[11px]'>No Proceedings</span>
+              </span>
+            ) : null}
           </div>
         )
       },
